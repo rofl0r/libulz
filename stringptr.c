@@ -1,5 +1,8 @@
 /*
- * author: rofl
+ * author: rofl0r
+ * 
+ * License: LGPL 2.1+ with static linking exception
+ * 
  */
 
 #include "stringptr.h"

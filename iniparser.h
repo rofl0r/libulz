@@ -1,3 +1,11 @@
+/*
+ * author: rofl0r
+ * 
+ * License: LGPL 2.1+ with static linking exception
+ * 
+ */
+
+
 #ifndef _INIPARSER_H_
 #define _INIPARSER_H_
 

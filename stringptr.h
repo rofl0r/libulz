@@ -1,5 +1,8 @@
 /*
- * author: rofl
+ * author: rofl0r
+ * 
+ * License: LGPL 2.1+ with static linking exception
+ * 
  */
 
 #ifndef _STRINGPTR_H_
