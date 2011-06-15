@@ -107,7 +107,6 @@ void console_savecolors(console* self) {
 		self->org_colors[i] = RGB(console_fromthousand(r), console_fromthousand(g), console_fromthousand(b));
 	}
 	for (i = MIN_COLORPAIR_NUMBER; i < CONSOLE_COLORPAIRCOUNT; i++) {
-		if(!(fg < CONSOLE_COLORPAIRCOUNT && bg < CONSOLE_COLORPAIRCOUNT)) return;
 		pair_content(i, &fg, &bg);
 		self->org_fgcolors[i] = fg;
 		self->org_bgcolors[i] = bg;
