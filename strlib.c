@@ -96,3 +96,4 @@ void makeupper(char* i) {
 			return;
 	}
 }
+
