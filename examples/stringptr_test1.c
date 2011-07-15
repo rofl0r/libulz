@@ -1,4 +1,5 @@
-#include "stringptr.h"
+#include "../stringptr.h"
+//RcB: DEP "../stringptr.c"
 
 int main(void) {
 	char* test = "test";

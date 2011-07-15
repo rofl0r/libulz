@@ -15,6 +15,9 @@
 #include "optparser.h"
 #include "strlib.h"
 
+//RcB: DEP "stringptr.c"
+//RcB: DEP "strlib.c"
+
 
 /* IMPORTANT: optparser doesnt alloc any memory for string opts, it simply manipulates the ARGV buffer.
  * this means you dont have to manually free any of the stringptrs you get from op_getOpt

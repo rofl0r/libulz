@@ -8,6 +8,8 @@
 #include <string.h>
 #include "iniparser.h"
 
+//RcB: DEP "stringptr.c"
+
 ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname) {
 	ini_section result = {0, 0};
 	stringptr* line;
