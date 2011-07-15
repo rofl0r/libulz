@@ -17,16 +17,21 @@ extern "C" {
 #endif
 
 #include <stddef.h>
+#include <stdint.h>
 #include <time.h>
 
 time_t getFileModTime(const char* filename);
 char* getFileExt(const char* filename, size_t fnlen);
 int containsChar(char* str, char what);
+int hexval(char* i);
+int isAlpha(char* i);
+int isNumber(char* i);
 int isLetter(char* i);
 int isUpper(char* i);
 int isLower(char* i);
 void makelower(char* i);
 void makeupper(char* i);
+char* numberToString(uint64_t number, int signed_type, unsigned int base, char* buffer, size_t maxlen, int pad);
 
 #ifdef __cplusplus
 }
