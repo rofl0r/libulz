@@ -156,6 +156,7 @@ char* strstr_uc(char* haystack, char* needle, size_t needlesize) {
 	while(*haystack) {
 		save = haystack;
 		for(i = 0; i < needlesize; i++) {
+			if(!*haystack) return NULL;
 			if(isLower(haystack)) diff = -ludiff;
 			else diff = 0;
 			if(*(haystack) + diff != needle[i]) goto next;
@@ -175,6 +176,7 @@ char* strstar(const char* haystack, const char* needle, size_t needlesize) {
 	while(*haystack) {
 		save = (char*) haystack;
 		for(i = 0; i < needlesize; i++) {
+			if(!*haystack) return NULL;
 			if(needle[i] != '*' && *(haystack) != needle[i]) goto next;
 			haystack++;
 		}
