@@ -13,6 +13,8 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 
 time_t getFileModTime(const char* filename) {
 	struct stat st;
@@ -136,6 +138,56 @@ void makeupper(char* i) {
 		default:
 			return;
 	}
+}
+
+char* strdup_n(char* str, size_t len) {
+	if (!str || !len) return NULL;
+	char * res;
+	if((res = malloc(len + 1)))
+		memcpy(res, str, len + 1);
+	return res;
+}
+
+char* strstr_uc(char* haystack, char* needle, size_t needlesize) {
+	if(!haystack || !needle || !needlesize) return NULL;
+	char diff;
+	size_t i;
+	char* save;
+	while(*haystack) {
+		save = haystack;
+		for(i = 0; i < needlesize; i++) {
+			if(isLower(haystack)) diff = -ludiff;
+			else diff = 0;
+			if(*(haystack) + diff != needle[i]) goto next;
+			haystack++;
+		}
+		return save;
+		next:
+		haystack++;
+	}
+	return NULL;
+}
+
+char* strstar(const char* haystack, const char* needle, size_t needlesize) {
+	if(!haystack || !needle || !needlesize) return NULL;
+	size_t i;
+	char* save;
+	while(*haystack) {
+		save = (char*) haystack;
+		for(i = 0; i < needlesize; i++) {
+			if(needle[i] != '*' && *(haystack) != needle[i]) goto next;
+			haystack++;
+		}
+		return save;
+		next:
+		haystack++;
+	}
+	return NULL;
+}
+
+char* intToString(int number, char* buffer, size_t bufsize) {
+	if (!buffer || !bufsize) return NULL;
+	return numberToString((int64_t) number, 1, 10, buffer, bufsize, 0);
 }
 
 /*

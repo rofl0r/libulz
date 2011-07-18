@@ -32,6 +32,10 @@ int isLower(char* i);
 void makelower(char* i);
 void makeupper(char* i);
 char* numberToString(uint64_t number, int signed_type, unsigned int base, char* buffer, size_t maxlen, int pad);
+char* intToString(int number, char* buffer, size_t bufsize);
+char* strdup_n(char* str, size_t len);
+char* strstr_uc(char* haystack, char* needle, size_t needlesize);
+char* strstar(const char* haystack, const char* needle, size_t needlesize);
 
 #ifdef __cplusplus
 }

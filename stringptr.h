@@ -21,9 +21,6 @@ typedef struct {
 	size_t size;
 } stringptr;
 
-typedef struct {
-	size_t size;
-} stringptrlist;
 
 #define SPLITERAL(X) &(stringptr){X, (sizeof(X) - 1)}
 
@@ -41,16 +38,8 @@ int streq(stringptr* a, stringptr* b);
 int stringptr_shiftright(stringptr* s, size_t count);
 int stringptr_shiftleft(stringptr* s, size_t count);
 size_t stringptr_chomp(stringptr* s);
-stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
-
 char* stringptr_strdup(stringptr* s);
-stringptrlist* stringptr_splitc(stringptr* buf, int delim);
-stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
-stringptrlist* parselines(stringptr* buf);
-stringptrlist* new_stringptrlist(size_t items);
-stringptrlist* resize_stringptrlist(stringptrlist* list, size_t items);
-void setlistitem(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
-stringptr* getlistitem(stringptrlist* l, size_t itemnumber);
+char* stringptr_rchr(stringptr* haystack, int needle);
 
 #ifdef __cplusplus
 }

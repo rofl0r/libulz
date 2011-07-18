@@ -20,6 +20,7 @@ extern "C" {
 
 #include <stdio.h>
 #include "stringptr.h"
+#include "stringptrlist.h"
 
 typedef struct {
 	stringptrlist* options;
@@ -29,7 +30,7 @@ typedef struct {
 int op_hasFlag(opts* options, char flag);
 stringptr* op_getOpt(opts* options, const char* optname);
 opts* op_parseOpts(int argc, char** argv);
-void op_fprintAll(opts* options, FILE* handle);
+void op_printAll(opts* options);
 void op_freeOpts(opts* options);
 
 #ifdef __cplusplus

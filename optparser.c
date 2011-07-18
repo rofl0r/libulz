@@ -14,9 +14,12 @@
 #include <stdio.h>
 #include "optparser.h"
 #include "strlib.h"
+#include "logger.h"
 
 //RcB: DEP "stringptr.c"
+//RcB: DEP "stringptrlist.c"
 //RcB: DEP "strlib.c"
+//RcB: DEP "logger.c"
 
 
 /* IMPORTANT: optparser doesnt alloc any memory for string opts, it simply manipulates the ARGV buffer.
@@ -83,13 +86,15 @@ opts* op_parseOpts(int argc, char** argv) {
 	return result;
 }
 
-void op_fprintAll(opts* options, FILE* handle) {
+void op_printAll(opts* options) {
 	size_t i;
 	if (!options || !options->options || !options->options->size) return;
 	for(i = 0; i < options->options->size/2; i++)
-		fprintf(handle, "%s: %s\n", getlistitem(options->options, (i*2))->ptr, getlistitem(options->options, (i*2 + 1))->ptr);
-	if(options->flags && options->flags->size && options->flags->ptr)
-		fprintf(handle, "%s\n", options->flags->ptr);
+		log_put(0, VARIS(getlistitem(options->options, (i*2))), VARISL(": "), VARIS(getlistitem(options->options, (i*2 + 1))), 0);
+	if(options->flags && options->flags->size && options->flags->ptr) {
+		log_puts(0, options->flags);
+		log_putln(0);
+	}
 }
 
 void op_freeOpts(opts* options) {

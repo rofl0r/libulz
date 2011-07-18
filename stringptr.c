@@ -4,8 +4,10 @@
  * License: LGPL 2.1+ with static linking exception
  * 
  */
-
 #include "stringptr.h"
+//#include "strlib.h"
+//-RcB: DEP "strlib.c"
+
 #include <assert.h>
 #include <string.h>
 #include <stddef.h>
@@ -14,10 +16,11 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <dirent.h>
 
 stringptr* new_string(size_t size) {
 	stringptr* result = (stringptr*) malloc(sizeof(stringptr) + size + 1);
-	if (result == NULL) return NULL;
+	if (!result) return NULL;
 	result->ptr = (char*)result + sizeof(stringptr);
 	result->size = size;
 	*((char*) (result->ptr + size)) = '\0';
@@ -142,60 +145,6 @@ stringptr* stringptr_concat(stringptr* self, ...) {
 	return result;
 }
 
-stringptr* getlistitem(stringptrlist* l, size_t itemnumber) {
-	if(!l || itemnumber >= l->size)
-		return NULL;
-	return (stringptr*) (((char*)l) + sizeof(stringptrlist) + (itemnumber * sizeof(stringptr)));
-}
-
-void setlistitem(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen) {
-	stringptr* item =getlistitem(l, itemnumber);
-	if (!item) {
-		return;
-	}	
-	item->ptr = buf;
-	item->size = buflen;
-}	
-
-stringptrlist* new_stringptrlist(size_t items) {
-	stringptrlist* result = (stringptrlist*) malloc(sizeof(stringptrlist) + (sizeof(stringptr) * items));
-	if(result)
-		result->size = 0;
-	return result;
-}
-
-stringptrlist* resize_stringptrlist(stringptrlist* list, size_t items) {
-	if(!list) return NULL;
-	return (stringptrlist*) realloc(list, sizeof(stringptrlist) + (sizeof(stringptr) * items));
-}
-
-// splits a stringptr into a list
-// it returns a list of stringptrs. however they have not to be freed separately
-// since they're alloced together with the list.
-// also, delim in the original buffer will be replaced with '\0'
-stringptrlist* stringptr_splitc(stringptr* buf, int delim) {
-	size_t vol = (4096 - sizeof(stringptrlist)) / sizeof(stringptr); // lets start with one heap page
-	size_t i, linestart;
-	linestart = 0;
-	stringptrlist* result = new_stringptrlist(vol);
-	if(!result) return NULL;
-
-	for(i=0;i<=buf->size;i++) {
-		if(i == buf->size || buf->ptr[i] == delim) {			
-			result->size++;
-			if(result->size > vol) {
-				vol *= 2;
-				result = resize_stringptrlist(result, vol);
-				if(!result) return NULL;
-			}
-			setlistitem(result, result->size-1, buf->ptr + linestart, i - linestart);
-			linestart = i+1;
-			buf->ptr[i] = 0;
-		}
-	}
-	return result;
-}
-
 static inline int islb(char* p) {
 	return *p == '\n' || *p == '\r';
 }
@@ -244,68 +193,12 @@ int stringhere(stringptr* haystack, size_t bufpos, stringptr* needle) {
 	return 0;
 }
 
-// splits a stringptr into a list
-// it returns a list of stringptrs. however they have not to be freed separately
-// since they're alloced together with the list.
-// also, the first character of any occurence of delim in the original buffer will be replaced with '\0'
-// the count of items will always be number of matches + 1
-// i.e. if there's no match, the entire source buffer will be returned as first listitem.
-stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim) {
-	size_t vol = (4096 - sizeof(stringptrlist)) / sizeof(stringptr); // lets start with one heap page
-	size_t i, linestart;
-	linestart = 0;
-	stringptrlist* result = new_stringptrlist(vol);
-	if(!result) return NULL;
-	i = 0;
-	while(i<=buf->size) {
-		if(i == buf->size || stringhere(buf, i, delim)) {			
-			result->size++;
-			if(result->size > vol) {
-				vol *= 2;
-				result = resize_stringptrlist(result, vol);
-				if(!result) return NULL;
-			}
-			setlistitem(result, result->size-1, buf->ptr + linestart, i - linestart);
-			linestart = i + delim->size;
-			buf->ptr[i] = 0;
-			i += delim->size;
-		} else
-			i++;
+char* stringptr_rchr(stringptr* haystack, int needle) {
+	ssize_t i;
+	if(!haystack || !haystack->size) return NULL;
+	for(i = haystack->size - 1; i >= 0; i--) {
+		if(haystack->ptr[i] == needle)
+			return haystack->ptr + i;
 	}
-	return result;
+	return NULL;
 }
-
-stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit) {
-	if(!buf || !what || !whit) return NULL;
-	stringptrlist* l;
-	stringptr* result = NULL, *temp;
-	size_t i, w;
-	if((l = stringptr_splits(buf, what))) {
-		result = new_string(buf->size - ((l->size - 1) * what->size) + ((l->size - 1) * whit->size));
-		if(!result) return NULL;
-		w = 0;
-		for(i = 0; i < l->size; i++) {
-			if((temp = getlistitem(l, i))) {
-				if(temp->size) {
-					memcpy(result->ptr + w, temp->ptr, temp->size);
-					w += temp->size;
-				}
-				if((i < l->size - 1) && whit->size) {
-					memcpy(result->ptr + w, whit->ptr, whit->size);
-					w+=whit->size;
-				}
-			}
-		}
-		free(l);
-	}
-	return result;
-}
-
-// parses line of a textfile.
-// it returns a list of stringptrs. however they have not to be freed separately
-// since they're alloced together with the list.
-// also, '\n' in the original buffer will be replaced with '\0'
-stringptrlist* parselines(stringptr* buf) {
-	return stringptr_splitc(buf, '\n');
-}
-
