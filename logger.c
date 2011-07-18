@@ -37,7 +37,7 @@ void log_put(int fd, ...) {
 			case VT_STRINGPTR:
 				log_puts(fd, *((stringptr**) v->ptr));
 				break;
-			case VT_CHAR_STAR:
+			case VT_CHAR_STAR: case VT_CONST_CHAR_STAR:
 				c->ptr = *((char**) v->ptr);
 				if(!c->ptr) break;
 				c->size = strlen(c->ptr);
