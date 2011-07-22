@@ -5,6 +5,8 @@
 #include "strlib.h"
 #include <unistd.h>
 #include <stdarg.h>
+#include <string.h>
+#include <errno.h>
 
 
 void log_putln(int fd) {
@@ -12,6 +14,7 @@ void log_putln(int fd) {
 }
 
 void log_puts(int fd, stringptr* s) {
+	if(!s || !s->size) return;
 	write(fd, s->ptr, s->size);
 }
 
@@ -20,6 +23,21 @@ void log_putd(int fd, uint64_t number, int signflag) {
 	char* cnv = numberToString(number, signflag, 10, buf, 0, 0);
 	if(cnv)
 		write(fd, cnv, strlen(cnv));
+}
+
+void log_putc(int fd, char* c) {
+	if(!c) return;
+	stringptr ss, *s = &ss;
+	s->ptr = c;
+	s->size = strlen(c);
+	log_puts(fd, s);
+}
+
+void log_perror(char* err) {
+	int no = errno;
+	log_putc(2, err);
+	log_puts(2, SPLITERAL(": "));
+	log_putc(2, strerror(no));
 }
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
