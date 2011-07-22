@@ -221,6 +221,7 @@ char* numberToString(uint64_t number, int signed_type, unsigned base, char* buff
 			len++;
 			lentest /= base;
 		}
+		if(!len) len = 1;
 	} else len = maxlen;
 	
 	tmp = len;
@@ -229,6 +230,10 @@ char* numberToString(uint64_t number, int signed_type, unsigned base, char* buff
 	
 	for(i = 0; i < len; i++) result[i] = '0';
 	result[len] = 0;
+	if(!number) {
+		if(!pad) result += len - 1;
+		return result;
+	}
 
 	while (number && len) {
 		i = number % base;

@@ -28,6 +28,18 @@ int main(void) {
 	puts(numberToString(testint64, 1, base, buffer, 20, 1));
 	puts(numberToString(testuint64, 0, base, buffer, 20, 1));
 	
+	int pad = 0;
+	puts(numberToString((int64_t) 0, 1, 2, buffer, 0, pad));
+	puts(numberToString((uint64_t)0, 0, 8, buffer, 0, pad));
+	puts(numberToString(0, 1, 10, buffer, 20, pad));
+	puts(numberToString(0, 0, 16, buffer, 20, pad));
+
+	pad = 1;
+	puts(numberToString((int64_t) 0, 1, 2, buffer, 0, pad));
+	puts(numberToString((uint64_t)0, 0, 8, buffer, 0, pad));
+	puts(numberToString(0, 1, 10, buffer, 20, pad));
+	puts(numberToString(0, 0, 16, buffer, 20, pad));
+	
 	
 	return 0;
 }
