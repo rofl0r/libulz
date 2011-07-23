@@ -101,7 +101,7 @@ stringptr* readfile(char* filename) {
 	fclose(f);
 	return buf;
 }
-
+/*
 stringptr* format(char* fmt, ...) {
 	const size_t BUF_SIZE = 1000;
 	stringptr* result = new_string(BUF_SIZE);
@@ -112,7 +112,7 @@ stringptr* format(char* fmt, ...) {
 	va_end(ap);	
 	return result;
 }
-
+*/
 // use like this: stringptr_concat(str1, str2, str3, NULL);
 // returns a new string made up of all single strings passed...
 stringptr* stringptr_concat(stringptr* self, ...) {

@@ -22,7 +22,7 @@ typedef struct {
 } stringptr;
 
 
-#define SPLITERAL(X) &(stringptr){X, (sizeof(X) - 1)}
+#define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
 
 int stringhere(stringptr* haystack, size_t bufpos, stringptr* needle);
 stringptr* new_string(size_t size);
