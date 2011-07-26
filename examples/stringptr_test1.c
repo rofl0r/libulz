@@ -8,3 +8,4 @@ int main(void) {
 	stringptr_tofile("test.txt", &tester);
 	return 0;
 }
+

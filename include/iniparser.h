@@ -23,3 +23,4 @@ void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr*
 #endif
 
 //RcB: DEP "../src/iniparser/*.c"
+

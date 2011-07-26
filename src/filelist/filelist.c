@@ -66,3 +66,4 @@ void filelist_free(filelist* l) {
 		globfree(&l->pglob);
 	}
 }
+

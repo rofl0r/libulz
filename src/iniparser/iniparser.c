@@ -48,3 +48,4 @@ void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr*
 	result->size = 0;
 	result->ptr = NULL;
 }
+
