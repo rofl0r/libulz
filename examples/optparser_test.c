@@ -1,4 +1,4 @@
-#include "optparser.h"
+#include "../include/optparser.h"
 #include <assert.h>
 
 // laughably the test needs c++0x so the strings can be passed on the stack without too much hardcoding.
@@ -37,37 +37,37 @@ int main(int argl, char** argv) {
 #undef STK		
 	int argc = 8;
 #ifdef MANUAL	
-	opts* opt = op_parseOpts(argl, argv);
+	opts* opt = op_parse(argl, argv);
 #else	
-	opts* opt = op_parseOpts(argc, buf);
+	opts* opt = op_parse(argc, buf);
 #endif	
 	stringptr* temp;
 	
-	assert(!op_hasFlag(opt, 'a'));
-	assert(!op_hasFlag(opt, 'b'));
-	assert(!op_hasFlag(opt, 'z'));
+	assert(!op_hasflag(opt, 'a'));
+	assert(!op_hasflag(opt, 'b'));
+	assert(!op_hasflag(opt, 'z'));
 	
-	assert(op_hasFlag(opt, 'o'));
-	assert(op_hasFlag(opt, 'p'));
-	assert(op_hasFlag(opt, 'q'));
+	assert(op_hasflag(opt, 'o'));
+	assert(op_hasflag(opt, 'p'));
+	assert(op_hasflag(opt, 'q'));
 	
-	assert(op_hasFlag(opt, 'r'));
-	assert(op_hasFlag(opt, 's'));
-	assert(op_hasFlag(opt, 't'));
+	assert(op_hasflag(opt, 'r'));
+	assert(op_hasflag(opt, 's'));
+	assert(op_hasflag(opt, 't'));
 	
-	assert(op_hasFlag(opt, 'c'));
-	assert(op_hasFlag(opt, 'm'));
-	assert(op_hasFlag(opt, 'd'));
+	assert(op_hasflag(opt, 'c'));
+	assert(op_hasflag(opt, 'm'));
+	assert(op_hasflag(opt, 'd'));
 	
-	temp = op_getOpt(opt, "cmd");
+	temp = op_get(opt, "cmd");
 	assert(temp && !strcmp(temp->ptr, "test"));
-	temp = op_getOpt(opt, "cmd2");
+	temp = op_get(opt, "cmd2");
 	assert(temp && !strcmp(temp->ptr, "test2=test2"));
-	assert(!op_getOpt(opt, "cmd3"));
-	assert(!op_getOpt(opt, "cmd4"));
-	assert(!op_getOpt(opt, "foo"));
+	assert(!op_get(opt, "cmd3"));
+	assert(!op_get(opt, "cmd4"));
+	assert(!op_get(opt, "foo"));
 	
-	op_freeOpts(opt);
+	op_free(opt);
 	
 	return 0;
 	
