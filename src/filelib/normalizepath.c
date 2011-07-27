@@ -3,6 +3,7 @@
 #include <limits.h>
 
 /* removes multiple slashes, /./ style stuff and resolves ../ kind of stuff on _absolute_ paths.
+ * will always strip trailing slashes.
  * will fail with relative paths. */
 int normalizepath(stringptr* path) {
 	char buf[PATH_MAX];
