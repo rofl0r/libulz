@@ -21,7 +21,7 @@ typedef struct {
 	size_t size;
 } stringptr;
 
-
+#define SP_INIT(X, Y) {X, Y}
 #define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
 
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)
