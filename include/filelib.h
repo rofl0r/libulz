@@ -11,6 +11,7 @@ time_t getFileModTime(const char* filename);
 size_t getfilesize(char* filename);
 int normalizepath(stringptr* path);
 ssize_t getpathdiff(stringptr* path1, stringptr* path2, char* workbuf);
+char* ulz_mkdtemp(char* templ);
 
 #endif
 
