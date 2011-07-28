@@ -20,20 +20,16 @@ extern "C" {
 
 #include <stddef.h>
 #include "stringptr.h"
-#include "stringptrlist.h"
 
 typedef struct {
-	stringptrlist* options;
-	stringptr* flags;	
-} opts;
+	unsigned argc;
+	char** argv;
+} op_state;
 
-int op_hasflag(opts* options, char flag);
-stringptr* op_get(opts* options, const char* optname);
-/* IMPORTANT: optparser doesnt alloc any memory for string opts, it simply manipulates the ARGV buffer.
- * this means you dont have to manually free any of the stringptrs you get from op_get */
-opts* op_parse(int argc, char** argv);
-void op_printall(opts* options);
-void op_free(opts* options);
+void op_init(op_state* p, int argc, char** argv);
+char* op_get(op_state* p, stringptr* arg);
+int op_hasflag(op_state* p, stringptr* flag);
+void op_printall(op_state* p);
 
 #ifdef __cplusplus
 }
