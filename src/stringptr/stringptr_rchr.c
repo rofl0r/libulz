@@ -1,4 +1,5 @@
 #include "../../include/stringptr.h"
+#include <sys/types.h>
 
 char* stringptr_rchr(stringptr* haystack, int needle) {
 	ssize_t i;
