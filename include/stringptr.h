@@ -23,6 +23,7 @@ typedef struct {
 
 #define SP_INIT(X, Y) {X, Y}
 #define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
+#define SPDECLAREC(X, Y) stringptr X##_storage, *X = stringptr_fromchar(Y, &X##_storage)
 
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)
 #define stringptr_free(a) free(a)
@@ -48,6 +49,7 @@ char* stringptr_rchr(stringptr* haystack, int needle);
 stringptr* stringptr_format(char* fmt, ...);
 stringptr* stringptr_fromfile(char* filename);
 size_t stringptr_tofile(char* filename, stringptr* buffer);
+stringptr* stringptr_fromchar(char* s, stringptr* out);
 
 #ifdef __cplusplus
 }
