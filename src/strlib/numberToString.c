@@ -11,8 +11,6 @@
     @params pad: pad with zeroes
 */
 char* numberToString(uint64_t number, int signed_type, unsigned base, char* buffer, size_t maxlen, int pad) {
-	static const char conv_cypher[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	static const size_t conv_cyper_len = sizeof(conv_cypher) - 1;
 	uint64_t lentest;
 	
 	size_t tmp, len = 0, i;

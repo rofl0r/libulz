@@ -44,6 +44,9 @@ ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...);
 void ulz_printf(const char* fmt, ...);
 void ulz_fprintf(int fd, const char* fmt, ...);
 
+extern const char conv_cypher[];
+extern const size_t conv_cyper_len;
+
 #ifdef __cplusplus
 }
 #endif
