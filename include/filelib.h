@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <time.h>
+#include <sys/types.h>
 #include "stringptr.h"
 
 char* getFileExt(const char* filename, size_t fnlen);
