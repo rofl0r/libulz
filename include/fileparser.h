@@ -7,10 +7,10 @@
 #include "stringptr.h"
 
 typedef struct {
-	FILE* file;
 	uint64_t fpos;
 	size_t len;
 	char buf[1024];
+	int file;
 } fileparser;
 
 // success: 0
