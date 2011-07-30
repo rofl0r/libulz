@@ -26,12 +26,45 @@ int main() {
 	
 	ret = ulz_snprintf(buf, 4, "%d", 1337);
 	assert(ret == 3);
+	assert(!strcmp(buf, "133"));
 	puts(buf);
 	
 	ret = ulz_snprintf(NULL, 0, "%d", 1337);
 	assert(ret == 4);
 	
 	ret = ulz_snprintf(buf, sizeof(buf), "%p", buf);
+	puts(buf);
+
+	ret = ulz_snprintf(NULL, 0, "%x", 0xa);
+	assert(ret == 1);
+
+	ret = ulz_snprintf(NULL, 0, "%X", 0xa);
+	assert(ret == 1);
+
+	ret = ulz_snprintf(buf, 10, "%x", 0xa);
+	assert(ret == 1);
+	assert(!strcmp(buf, "a"));
+	puts(buf);
+
+	ret = ulz_snprintf(buf, 10, "%X", 0xa);
+	assert(ret == 1);
+	assert(!strcmp(buf, "A"));
+	puts(buf);
+
+	ret = ulz_snprintf(NULL, 0, "%.2x", 0xa);
+	assert(ret == 2);
+
+	ret = ulz_snprintf(NULL, 0, "%.2X", 0xa);
+	assert(ret == 2);
+
+	ret = ulz_snprintf(buf, 10, "%.2x", 0xa);
+	assert(ret == 2);
+	assert(!strcmp(buf, "0a"));
+	puts(buf);
+
+	ret = ulz_snprintf(buf, 10, "%.2X", 0xa);
+	assert(ret == 2);
+	assert(!strcmp(buf, "0A"));
 	puts(buf);
 	
 	

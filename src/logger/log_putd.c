@@ -4,7 +4,7 @@
 
 void log_putd(int fd, uint64_t number, int signflag) {
 	char buf[32];
-	char* cnv = numberToString(number, signflag, 10, buf, 0, 0);
+	char* cnv = numberToString(number, 10, buf, 0, signflag ? NTS_SIGNED_TYPE : 0);
 	if(cnv)
 		write(fd, cnv, strlen(cnv));
 }

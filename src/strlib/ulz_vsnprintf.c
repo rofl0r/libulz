@@ -12,7 +12,7 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 	uint64_t inn;
 	size_t i,j, width = 0;
 	ssize_t res = 0;
-	int sign;
+	int nflags = 0;
 	int lng, lflag; // only required in case 'l'
 	unsigned int base = 10;
 	for(a = (char*)format; *a; a++) {
@@ -48,11 +48,12 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 					}
 					break;
 				case 'd':
-					sign = 1;
+					nflags = NTS_SIGNED_TYPE;
 					intstart:
 					inn = va_arg(*ap, int);
 					nconv:
-					ins = numberToString(inn, sign, base, cbuf, width, !!(width));
+					if(width) nflags |= NTS_PAD;
+					ins = numberToString(inn, base, cbuf, width, nflags);
 					width = 0;
 					base = 10;
 					goto strmove;
@@ -66,8 +67,8 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 						} else lng = 0;
 					}
 					a++;
-					sign = (a[0] == 'd');
-					if(!sign && a[0] != 'u') goto fail;
+					nflags = (a[0] == 'd') ? NTS_SIGNED_TYPE : 0;
+					if(!nflags && a[0] != 'u') goto fail; // TODO still required ? doesnt look like it
 					if(lflag) {
 						if(!lng)
 							inn = va_arg(*ap, unsigned long);
@@ -77,15 +78,16 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 						inn = va_arg(*ap, size_t);
 					goto nconv;
 				case 'p':
-					base = 16; sign = 0;
+					base = 16; nflags = 0;
 					inn = va_arg(*ap, size_t);
 					goto nconv;
 				case 'u':
 					inn = va_arg(*ap, unsigned);
-					sign = 0;
+					nflags = 0;
 					goto nconv;
 				case 'x': case 'X':
-					base = 16; sign = 0;
+					base = 16;
+					nflags = (*a == 'x') ? NTS_LOWERCASE_CHARS : 0;
 					goto intstart;
 				default:
 					goto fail;

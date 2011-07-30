@@ -22,6 +22,13 @@ extern "C" {
 #include <stdarg.h>
 #include <unistd.h>
 
+typedef enum {
+	NTS_NONE = 0,
+	NTS_PAD = 1,
+	NTS_SIGNED_TYPE = 2,
+	NTS_LOWERCASE_CHARS = 4
+} numberToString_flags;
+
 time_t getFileModTime(const char* filename);
 char* getFileExt(const char* filename, size_t fnlen);
 int containsChar(char* str, char what);
@@ -33,7 +40,7 @@ int isUpper(char* i);
 int isLower(char* i);
 void makelower(char* i);
 void makeupper(char* i);
-char* numberToString(uint64_t number, int signed_type, unsigned int base, char* buffer, size_t maxlen, int pad);
+char* numberToString(uint64_t number, unsigned int base, char* buffer, size_t maxlen, int flags);
 char* intToString(int number, char* buffer, size_t bufsize);
 int strtoint(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
