@@ -41,7 +41,7 @@ int isLower(char* i);
 void makelower(char* i);
 void makeupper(char* i);
 char* numberToString(uint64_t number, unsigned int base, char* buffer, size_t maxlen, int flags);
-char* intToString(int number, char* buffer, size_t bufsize);
+char* intToString(int number, char* buffer);
 int strtoint(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
 char* strstr_uc(char* haystack, char* needle, size_t needlesize);
@@ -50,6 +50,8 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...);
 void ulz_printf(const char* fmt, ...);
 void ulz_fprintf(int fd, const char* fmt, ...);
+int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr);
+void stringfromipv4(unsigned char* ip_buf_4_bytes, char* outbuf_16_bytes);
 
 extern const char conv_cypher[];
 extern const size_t conv_cyper_len;
