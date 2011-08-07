@@ -16,7 +16,8 @@ SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 LOBJS = $(OBJS:.o=.lo)
 
-CFLAGS  = -Os -ffreestanding -std=c99 -D_XOPEN_SOURCE=700 -pipe
+CFLAGS += -Os 
+#-ffreestanding -std=c99 -D_XOPEN_SOURCE=700 -pipe
 #LDFLAGS = -nostdlib -shared -fPIC -Wl,-e,_start -Wl,-Bsymbolic-functions
 INC     = -I./include
 #PIC     = -fPIC -O3
