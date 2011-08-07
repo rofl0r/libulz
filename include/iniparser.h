@@ -18,6 +18,7 @@ typedef struct {
 } ini_section;
 
 ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname);
+ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectionname, ini_section* prev);
 void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result);
 
 #endif

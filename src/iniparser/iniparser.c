@@ -8,11 +8,11 @@
 #include <string.h>
 #include "../../include/iniparser.h"
 
-ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname) {
+ini_section iniparser_get_section_at(stringptrlist* inifile, stringptr* sectionname, size_t startline) {
 	ini_section result = {0, 0};
 	stringptr* line;
 	size_t i;
-	for(i = 0; i < inifile->size; i++) {
+	for(i = startline; i < stringptrlist_getsize(inifile); i++) {
 		line = stringptrlist_get(inifile, i);
 		if(!line) continue; // this should never happen...
 		if(
@@ -28,9 +28,17 @@ ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname
 		}
 	}
 	if(result.startline && !result.linecount)
-		result.linecount = inifile->size - result.startline;
+		result.linecount = stringptrlist_getsize(inifile) - result.startline;
 	done:
 	return result;
+}
+
+ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname) {
+	return iniparser_get_section_at(inifile, sectionname, 0);
+}
+
+ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectionname, ini_section* prev) {
+	return iniparser_get_section_at(inifile, sectionname, prev->startline + prev->linecount);
 }
 
 void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result) {
