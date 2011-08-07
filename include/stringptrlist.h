@@ -10,6 +10,7 @@ extern "C" {
 
 #define stringptrlist sblist
 #define stringptrlist_new(X) sblist_new(sizeof(stringptr), (X))
+#define stringptrlist_free(X) sblist_free(X)
 //int stringptrlist_add(stringptrlist** l, char* s, size_t len);
 #define stringptrlist_add(X, Y, Z) sblist_add((X), SPMAKE((Y), (Z)))
 //int stringptrlist_set(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
@@ -22,6 +23,7 @@ extern "C" {
 // since they're alloced together with the list.
 // also, '\n' in the original buffer will be replaced with '\0'
 #define stringptr_linesplit(b) stringptr_splitc(b, '\n')
+
 
 
 stringptrlist* stringptr_splitc(stringptr* buf, int delim);

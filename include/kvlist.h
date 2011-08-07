@@ -23,6 +23,7 @@ typedef struct {
 #define kv_add(W, X, Y, Z) sblist_add((W), SPVMAKE((X), (Y), (Z)))
 //kvlist* kv_new(size_t items);
 #define kv_new(X) sblist_new(sizeof(stringptrv), (X))
+#define kv_free(X) sblist_free(X)
 //kvlist* kv_resize(kvlist* list, size_t items);
 #define kv_getsize(X) ((X)->count)
 
