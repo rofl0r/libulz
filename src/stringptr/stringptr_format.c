@@ -8,7 +8,7 @@ stringptr* stringptr_format(char* fmt, ...) {
 	if(!result || !fmt) return NULL;
 	va_list ap;
 	va_start(ap, fmt);
-	ulz_vsnprintf(result->ptr, BUF_SIZE, fmt, &ap);
+	ulz_vsnprintf(result->ptr, BUF_SIZE, fmt, ap);
 	va_end(ap);	
 	return result;
 }

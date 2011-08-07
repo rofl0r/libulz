@@ -46,7 +46,7 @@ int strtoint(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
 char* strstr_uc(char* haystack, char* needle, size_t needlesize);
 char* strstar(const char* haystack, const char* needle, size_t needlesize);
-ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* ap);
+ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list ap);
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...);
 void ulz_printf(const char* fmt, ...);
 void ulz_fprintf(int fd, const char* fmt, ...);

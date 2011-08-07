@@ -6,7 +6,7 @@
 // returns the number of bytes written to the target. should behave exactly as posix sprintf except %x also returns hex decimals in uppercase.
 // destsize is treated like in the original. it will leave space for a trailing 0,
 // if NULL is passed as dest it will return the number of bytes it would haven written if a sufficiently large buffer was provided.
-ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* ap) {
+ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list ap) {
 	char *ins, *a, *o = dest, *omax = dest ? dest + destsize - 1: NULL;
 	char cbuf[32];
 	uint64_t inn;
@@ -35,7 +35,7 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 					a += i - 1;
 					goto checkmod;
 				case 's':
-					ins = va_arg(*ap, char*);
+					ins = va_arg(ap, char*);
 					strmove:
 					if(!ins) goto fail;
 					while(*ins) {
@@ -50,7 +50,7 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 				case 'd':
 					nflags = NTS_SIGNED_TYPE;
 					intstart:
-					inn = va_arg(*ap, int);
+					inn = va_arg(ap, int);
 					nconv:
 					if(width) nflags |= NTS_PAD;
 					ins = numberToString(inn, base, cbuf, width, nflags);
@@ -71,18 +71,18 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list* 
 					if(!nflags && a[0] != 'u') goto fail; // TODO still required ? doesnt look like it
 					if(lflag) {
 						if(!lng)
-							inn = va_arg(*ap, unsigned long);
+							inn = va_arg(ap, unsigned long);
 						else
-							inn = va_arg(*ap, unsigned long long);
+							inn = va_arg(ap, unsigned long long);
 					} else 
-						inn = va_arg(*ap, size_t);
+						inn = va_arg(ap, size_t);
 					goto nconv;
 				case 'p':
 					base = 16; nflags = 0;
-					inn = va_arg(*ap, size_t);
+					inn = va_arg(ap, size_t);
 					goto nconv;
 				case 'u':
-					inn = va_arg(*ap, unsigned);
+					inn = va_arg(ap, unsigned);
 					nflags = 0;
 					goto nconv;
 				case 'x': case 'X':

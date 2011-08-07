@@ -6,7 +6,7 @@ void ulz_fprintf(int fd, const char* fmt, ...) {
 	char dest[512];
 	va_list ap;
 	va_start(ap, fmt);
-	ssize_t result = ulz_vsnprintf(dest, sizeof(dest), fmt, &ap);
+	ssize_t result = ulz_vsnprintf(dest, sizeof(dest), fmt, ap);
 	va_end(ap);
 	if(result) {
 		write(fd, dest, result);
