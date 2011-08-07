@@ -15,7 +15,7 @@ extern "C" {
 //int stringptrlist_set(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
 #define stringptrlist_set(W, X, Y, Z) sblist_set((W), SPMAKE((Y), (Z)), (X))
 //stringptr* stringptrlist_get(stringptrlist* l, size_t itemnumber);
-#define stringptrlist_get(X, Y) (stringptr*) (sblist_get((X), (Y)))
+#define stringptrlist_get(X, Y) ((stringptr*) (sblist_get((X), (Y))))
 #define stringptrlist_getsize(X) ((X)->count)
 // parses line of a textfile.
 // it returns a list of stringptrs. however they have not to be freed separately
