@@ -2,16 +2,21 @@
 #define STRINGPTRLIST_H_
 
 #include "stringptr.h"
+#include "sblist.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
-	size_t size;
-	size_t capa;
-} stringptrlist;
-
+#define stringptrlist sblist
+#define stringptrlist_new(X) sblist_new(sizeof(stringptr), (X))
+//int stringptrlist_add(stringptrlist** l, char* s, size_t len);
+#define stringptrlist_add(X, Y, Z) sblist_add((X), SPMAKE((Y), (Z)))
+//int stringptrlist_set(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
+#define stringptrlist_set(W, X, Y, Z) sblist_set((W), SPMAKE((Y), (Z)), (X))
+//stringptr* stringptrlist_get(stringptrlist* l, size_t itemnumber);
+#define stringptrlist_get(X, Y) (stringptr*) (sblist_get((X), (Y)))
+#define stringptrlist_getsize(X) ((X)->count)
 // parses line of a textfile.
 // it returns a list of stringptrs. however they have not to be freed separately
 // since they're alloced together with the list.
@@ -21,11 +26,9 @@ typedef struct {
 
 stringptrlist* stringptr_splitc(stringptr* buf, int delim);
 stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
-stringptrlist* stringptrlist_new(size_t items);
-stringptrlist* stringptrlist_resize(stringptrlist* list, size_t items);
-int stringptrlist_add(stringptrlist** l, char* s, size_t len);
-int stringptrlist_set(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
-stringptr* stringptrlist_get(stringptrlist* l, size_t itemnumber);
+
+//stringptrlist* stringptrlist_resize(stringptrlist* list, size_t items);
+
 
 // logically belonging to stringptr.c, but needs list to operate
 stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);

@@ -1,3 +1,5 @@
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
 #include "../../include/filelib.h"
 #include "../../include/stringptr.h"
 #include <limits.h>

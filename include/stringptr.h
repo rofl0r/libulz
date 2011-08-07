@@ -23,6 +23,7 @@ typedef struct {
 
 #define SP_INIT(X, Y) {X, Y}
 #define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
+#define SPMAKE(X, Y) &(stringptr){(X), (Y)}
 #define SPDECLAREC(X, Y) stringptr X##_storage, *X = stringptr_fromchar(Y, &X##_storage)
 
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)

@@ -31,8 +31,8 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 		globfree(&l->pglob);
 		return -1;
 	}
-	if(flags & FLF_INCLUDE_DOT) stringptrlist_add(&l->files, "./", 2);
-	if(flags & FLF_INCLUDE_DOT_DOT) stringptrlist_add(&l->files, "../", 3);
+	if(flags & FLF_INCLUDE_DOT) stringptrlist_add(l->files, "./", 2);
+	if(flags & FLF_INCLUDE_DOT_DOT) stringptrlist_add(l->files, "../", 3);
 	for(i = 0; i < l->pglob.gl_pathc; i++) {
 		s->ptr = l->pglob.gl_pathv[i];
 		s->size = strlen(l->pglob.gl_pathv[i]);
@@ -52,7 +52,7 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 			s->size = (s->ptr + s->size) - o;
 			s->ptr = o;
 		}
-		if(!stringptrlist_add(&l->files, s->ptr, s->size)) {
+		if(!stringptrlist_add(l->files, s->ptr, s->size)) {
 			free(l->files);
 			goto err;
 		}
