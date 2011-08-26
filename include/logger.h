@@ -12,6 +12,9 @@ void log_putd(int fd, uint64_t number, int signflag);
 void log_put(int fd, ...);
 void log_putc(int fd, char* c);
 void log_perror(char* err);
+void log_timestamp(int fd);
+
+#define log_putspace(X) log_puts(X, SPL(" "))
 
 #endif
 
