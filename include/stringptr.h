@@ -27,7 +27,7 @@ typedef struct {
 #define SPDECLAREC(X, Y) stringptr X##_storage, *X = stringptr_fromchar(Y, &X##_storage)
 
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)
-#define stringptr_free(a) free(a)
+#define stringptr_free(a) do { if(a) free(a); (a) = NULL; } while(0)
 
 
 #ifndef DISABLE_STRINGPTR_SHORT_MACROS
