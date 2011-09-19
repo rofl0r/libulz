@@ -9,6 +9,7 @@
 #ifndef _INIPARSER_H_
 #define _INIPARSER_H_
 
+#include <unistd.h>
 #include "stringptr.h"
 #include "stringptrlist.h"
 
