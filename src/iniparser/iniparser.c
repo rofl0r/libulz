@@ -41,19 +41,30 @@ ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectio
 	return iniparser_get_section_at(inifile, sectionname, prev->startline + prev->linecount);
 }
 
-void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result) {
+ini_section iniparser_file_as_section(stringptrlist* inifile) {
+	ini_section result;
+	result.linecount = stringptrlist_getsize(inifile);
+	result.startline = 0;
+	return result;
+}
+
+ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result, size_t startline) {
 	size_t i;
 	size_t maxline = section->startline + section->linecount;
 	stringptr* line;
-	for(i = section->startline; i < maxline; i++) {
+	for(i = startline; i < maxline; i++) {
 		line = stringptrlist_get(inifile, i);
 		if(line && line->size > key->size && *(line->ptr + key->size) == '=' && !memcmp(line->ptr, key->ptr, key->size)) {
 			result->size = line->size - (key->size + 1);
 			result->ptr = line->ptr + key->size + 1;
-			return;
+			return i;
 		}
 	}
 	result->size = 0;
 	result->ptr = NULL;
+	return (ssize_t) -1;
 }
 
+void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result) {
+	iniparser_getvalue_at(inifile, section, key, result, section->startline);
+}

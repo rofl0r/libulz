@@ -17,9 +17,12 @@ typedef struct {
 	size_t linecount;
 } ini_section;
 
+ini_section iniparser_file_as_section(stringptrlist* inifile);
 ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname);
 ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectionname, ini_section* prev);
 void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result);
+/* returns lineindex on success, -1 otherwise */
+ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result, size_t startline);
 
 #endif
 
