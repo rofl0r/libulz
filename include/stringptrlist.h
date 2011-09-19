@@ -36,7 +36,7 @@ stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
 stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
-
+stringptr* stringptrlist_tostring(stringptrlist* l);
 
 /*
 stringptrlist* listdir(char* dirname);
