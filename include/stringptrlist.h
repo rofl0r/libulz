@@ -35,6 +35,9 @@ stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
 // logically belonging to stringptr.c, but needs list to operate
 stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 
+int stringptrlist_contains(stringptrlist* list, stringptr* what);
+
+
 /*
 stringptrlist* listdir(char* dirname);
 void stringptrlist_sort(stringptrlist* l);
