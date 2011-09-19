@@ -19,6 +19,8 @@ typedef struct {
 	char* items;
 } sblist;
 
+#define sblist_getsize(X) ((X)->count)
+
 // for dynamic style
 sblist* sblist_new(size_t itemsize, size_t blockitems);
 void sblist_free(sblist* l);
