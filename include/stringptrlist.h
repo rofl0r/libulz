@@ -37,7 +37,8 @@ stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
 stringptr* stringptrlist_tostring(stringptrlist* l);
-
+void stringptrlist_freestrings(stringptrlist* l);
+void stringptrlist_freeall(stringptrlist* l);
 /*
 stringptrlist* listdir(char* dirname);
 void stringptrlist_sort(stringptrlist* l);
