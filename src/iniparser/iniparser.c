@@ -17,7 +17,7 @@ ini_section iniparser_get_section_at(stringptrlist* inifile, stringptr* sectionn
 		if(!line) continue; // this should never happen...
 		if(
 			!result.startline &&
-			line->size == (sectionname->size + 2) &&
+			line->size >= (sectionname->size + 2) && //test for >= because there may be trailing whitespace.
 			*line->ptr == '[' && *(line->ptr + 1 + sectionname->size) == ']' &&
 			!memcmp(line->ptr + 1, sectionname->ptr, sectionname->size)
 		)
