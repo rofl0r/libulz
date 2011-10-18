@@ -37,6 +37,7 @@ stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
 stringptr* stringptrlist_tostring(stringptrlist* l);
+stringptr* stringptrlist_tostring_dos(stringptrlist* l);
 void stringptrlist_freestrings(stringptrlist* l);
 void stringptrlist_freeall(stringptrlist* l);
 /*
