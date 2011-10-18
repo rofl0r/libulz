@@ -29,6 +29,14 @@ typedef struct {
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)
 #define stringptr_free(a) do { if(a) free(a); (a) = NULL; } while(0)
 
+#define stringptr_getsize(a) ((a)->size)
+#define stringptr_get(a) ((a)->ptr)
+#define stringptr_empty(a) ((a)->size == 0)
+
+#define stringptr_getsize_s(a) ((a) ? (a)->size : 0)
+#define stringptr_get_s(a) ((a) ? (a)->ptr : NULL)
+#define stringptr_empty_s(a) (!(a) || ((a)->size == 0))
+
 
 #ifndef DISABLE_STRINGPTR_SHORT_MACROS
 #define EQ(X, Y) stringptr_eq(X, Y) 
