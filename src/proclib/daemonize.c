@@ -2,6 +2,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#ifdef NO_LOG
+#define NO_DAEMONIZE_OUTPUT
+#endif
 
 void daemonize(void) {
 	pid_t pid = fork();
