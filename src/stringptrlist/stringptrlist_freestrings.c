@@ -7,5 +7,6 @@ void stringptrlist_freestrings(stringptrlist* l) {
 		item = stringptrlist_get(l, i);
 		if (item->ptr) free(item->ptr);
 		item->ptr = NULL;
+		item->size = 0;
 	}
 }
