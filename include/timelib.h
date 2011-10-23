@@ -4,6 +4,7 @@
 #include <stddef.h>
 
 int msleep(long millisecs);
+int microsleep(long microsecs);
 size_t timestamp(char* buffer, size_t bufsize);
 
 #endif
