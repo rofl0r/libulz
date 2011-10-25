@@ -24,6 +24,7 @@ ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectio
 void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result);
 /* returns lineindex on success, -1 otherwise */
 ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result, size_t startline);
+size_t iniparser_count_sections(stringptrlist* inifile);
 
 #endif
 
