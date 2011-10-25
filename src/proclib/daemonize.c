@@ -1,3 +1,5 @@
+#undef _GNU_SOURCE
+#define _GNU_SOURCE
 #include "../../include/logger.h"
 #include <unistd.h>
 #include <fcntl.h>
