@@ -53,7 +53,9 @@ void ulz_printf(const char* fmt, ...);
 void ulz_fprintf(int fd, const char* fmt, ...);
 int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr);
 void stringfromipv4(unsigned char* ip_buf_4_bytes, char* outbuf_16_bytes);
-int isnumericipv4(const char* ipstring) ;
+int isnumericipv4(const char* ipstring);
+
+#define mem_equal(A, B, C) (memcmp(A, B, C) == 0)
 
 extern const char conv_cypher[];
 extern const size_t conv_cyper_len;
