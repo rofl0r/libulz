@@ -47,6 +47,11 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list a
 						ins++;
 					}
 					break;
+				case 'c':
+					cbuf[0] = (unsigned char) va_arg(ap, int);
+					cbuf[1] = 0;
+					ins = cbuf;
+					goto strmove;
 				case 'd':
 					nflags = NTS_SIGNED_TYPE;
 					intstart:
