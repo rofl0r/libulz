@@ -1,4 +1,4 @@
-#include "../fileparser.h"
+#include "../include/fileparser.h"
 #include <stdio.h>
 
 // the missing newline at EOF is part of the functionality test.
