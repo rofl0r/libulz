@@ -1,5 +1,6 @@
 #include "../../include/stringptr.h"
 #include <string.h>
+#include <stdlib.h>
 
 stringptr* stringptr_new(size_t size) {
 	stringptr* result = (stringptr*) malloc(sizeof(stringptr) + size + 1);
