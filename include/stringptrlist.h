@@ -40,6 +40,10 @@ stringptr* stringptrlist_tostring(stringptrlist* l);
 stringptr* stringptrlist_tostring_dos(stringptrlist* l);
 void stringptrlist_freestrings(stringptrlist* l);
 void stringptrlist_freeall(stringptrlist* l);
+
+/* duplicates all stringptr's in the list. returns -1 on success, or the index of the failed item on failure.
+ all items up to this point are dup'ed. */
+ssize_t stringptrlist_dup_entries(stringptrlist* l);
 /*
 stringptrlist* listdir(char* dirname);
 void stringptrlist_sort(stringptrlist* l);
