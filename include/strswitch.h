@@ -19,7 +19,7 @@
 
 #define STRSWITCH_NON_ALPHA STRSWITCH_MATH_OPS: case ' ': case '@': case ',': case ';': case '.': case ':': case '_':  case '!': \
 			     case '?': case '"': case '&': case '(': case ')': case '[': case ']': case '{': case '}': \
-			     case '<': case '>': case '\\'
+			     case '<': case '>': case '\\': case '#': case '~'
 				     
 #define STRSWITCH_NON_ALPHA_C STRSWITCH_MATH_OPS: case ' ': case '@': case ',': case ';': case '.': case ':': case '_':  case '!': \
 			     case '&': case '(': case ')': case '[': case ']': case '{': case '}': \
