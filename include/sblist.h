@@ -36,6 +36,9 @@ void* sblist_get(sblist* l, size_t item);
 int sblist_add(sblist* l, void* item);
 int sblist_set(sblist* l, void* item, size_t pos);
 void sblist_delete(sblist* l, size_t item);
+char* sblist_item_from_index(sblist* l, size_t idx);
+int sblist_grow_if_needed(sblist* l);
+int sblist_insert(sblist* l, void* item, size_t pos);
 
 
 #define __sblist_concat_impl( x, y ) x##y

@@ -41,7 +41,7 @@ void sblist_free(sblist* l) {
 	free(l);
 }
 
-static char* sblist_item_from_index(sblist* l, size_t idx) {
+char* sblist_item_from_index(sblist* l, size_t idx) {
 	return l->items + (idx * l->itemsize);
 }
 
@@ -56,7 +56,7 @@ int sblist_set(sblist* l, void* item, size_t pos) {
 	return 1;
 }
 
-int sblist_add(sblist* l, void* item) {
+int sblist_grow_if_needed(sblist* l) {
 	char* temp;
 	if(l->count == l->capa) {
 		temp = realloc(l->items, (l->capa + l->blockitems) * l->itemsize);
@@ -64,6 +64,11 @@ int sblist_add(sblist* l, void* item) {
 		l->capa += l->blockitems;
 		l->items = temp;
 	}
+	return 1;
+}
+
+int sblist_add(sblist* l, void* item) {
+	if(!sblist_grow_if_needed(l)) return 0;
 	l->count++;
 	return sblist_set(l, item, l->count - 1);
 }
