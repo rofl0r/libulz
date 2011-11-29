@@ -2,12 +2,8 @@
 #include <string.h>
 
 void sblist_delete(sblist* l, size_t item) {
-	size_t i, m;
 	if (l->count && item < l->count) {
-		m = l->count - 1;
-		for(i = item; i < m; i++) {
-			memcpy(sblist_get(l, i), sblist_get(l, i + 1), l->itemsize);
-		}
+		memmove(sblist_item_from_index(l, item), sblist_item_from_index(l, item + 1), (sblist_getsize(l) - (item + 1)) * l->itemsize);
 		l->count--;
 	}
 }
