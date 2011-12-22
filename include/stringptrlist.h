@@ -3,7 +3,8 @@
 
 #include "stringptr.h"
 #include "sblist.h"
-
+#include <unistd.h>
+// ^ ssize_t
 #ifdef __cplusplus
 extern "C" {
 #endif
