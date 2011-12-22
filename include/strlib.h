@@ -47,6 +47,7 @@ int64_t strtoint64(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
 char* strstr_uc(char* haystack, char* needle, size_t needlesize);
 char* strstar(const char* haystack, const char* needle, size_t needlesize);
+char* findword(char* buf, char* word_uc, size_t word_len);
 ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list ap);
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...);
 void ulz_printf(const char* fmt, ...);
@@ -55,7 +56,8 @@ int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr);
 void stringfromipv4(unsigned char* ip_buf_4_bytes, char* outbuf_16_bytes);
 int isnumericipv4(const char* ipstring);
 
-#define mem_equal(A, B, C) (memcmp(A, B, C) == 0)
+#define mem_equal(A, B, C) (memcmp((A), (B), (C)) == 0)
+#define str_equal(A, B) (strcmp((A), (B)) == 0)
 
 extern const char conv_cypher[];
 extern const size_t conv_cyper_len;
