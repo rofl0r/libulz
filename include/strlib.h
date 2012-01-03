@@ -43,6 +43,7 @@ void makeupper(char* i);
 char* numberToString(uint64_t number, unsigned int base, char* buffer, size_t maxlen, int flags);
 char* intToString(int number, char* buffer);
 char* int64ToString(int64_t number, char* buffer);
+char* uint64ToString(uint64_t number, char* buffer);
 int strtoint(char* str, size_t len);
 int64_t strtoint64(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
