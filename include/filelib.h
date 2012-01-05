@@ -12,6 +12,7 @@ size_t getfilesize(char* filename);
 int normalizepath(stringptr* path);
 ssize_t getpathdiff(stringptr* path1, stringptr* path2, char* workbuf);
 char* ulz_mkdtemp(char* templ);
+size_t mktempdir(char* prefix, char* buffer, size_t bufsize);
 char* getfilename(stringptr* path);
 
 #endif
