@@ -1,8 +1,8 @@
 #ifndef TIMELIB_H
 #define TIMELIB_H
 
-#undef POSIX_C_SOURCE
-#define POSIX_C_SOURCE 200809L
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
 #include <stddef.h>
 #include <time.h>
 #include <sys/time.h>
