@@ -61,6 +61,7 @@ int isnumericipv4(const char* ipstring);
 
 #define mem_equal(A, B, C) (memcmp((A), (B), (C)) == 0)
 #define str_equal(A, B) (strcmp((A), (B)) == 0)
+#define strlitlen(A) (sizeof(A) - 1)
 
 extern const char conv_cypher[];
 extern const size_t conv_cyper_len;
