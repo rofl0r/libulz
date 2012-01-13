@@ -50,8 +50,13 @@ stringptr* stringptr_new(size_t size);
 stringptr* stringptr_concat(stringptr* self, ...);
 stringptr* stringptr_copy(stringptr* s);
 int stringptr_eq(stringptr* a, stringptr* b);
+
+/* shifts the start of a stringptr by count characters */
 int stringptr_shiftright(stringptr* s, size_t count);
+
+/* shifts(cuts) the tail of a stringptr by count characters */
 int stringptr_shiftleft(stringptr* s, size_t count);
+
 size_t stringptr_chomp(stringptr* s);
 char* stringptr_strdup(stringptr* s);
 char* stringptr_rchr(stringptr* haystack, int needle);
