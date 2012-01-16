@@ -64,6 +64,7 @@ stringptr* stringptr_format(char* fmt, ...);
 stringptr* stringptr_fromfile(char* filename);
 size_t stringptr_tofile(char* filename, stringptr* buffer);
 stringptr* stringptr_fromchar(char* s, stringptr* out);
+stringptr read_stdin_line(char* buf, size_t bufsize, int chomp);
 
 #ifdef __cplusplus
 }
@@ -72,4 +73,5 @@ stringptr* stringptr_fromchar(char* s, stringptr* out);
 #endif
 
 //RcB: DEP "../src/stringptr/stringptr_*.c"
+//RcB: DEP "../src/stringptr/read_stdin_line.c"
 
