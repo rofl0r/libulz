@@ -1,6 +1,9 @@
 #ifndef FILELIST_H
 #define FILELIST_H
 
+#undef _GNU_SOURCE
+#define _GNU_SOURCE
+
 #include <glob.h>
 
 #include "stringptr.h"
@@ -16,6 +19,7 @@ typedef enum {
 	FLF_INCLUDE_DOT = 1,
 	FLF_INCLUDE_DOT_DOT = 2,
 	FLF_EXCLUDE_PATH = 4,
+	FLF_INCLUDE_HIDDEN = 8,
 } filelistflags;
 
 int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags);
