@@ -7,6 +7,7 @@ int errfunc(const char *epath, int eerrno) {
 }
 */
 // returns 0 on success, -1 on alloc or pointer failure, otherwise glob errors as defined in man 3p glob
+// dir can be NULL or empty, this chooses the local directory then.
 int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 	char buf[256];
 	char *o;
@@ -16,7 +17,9 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 	int isdir;
 	int defaultflags = (flags & FLF_INCLUDE_HIDDEN) ? GLOB_PERIOD : 0;
 	
-	if(!l || !dir || !mask || !dir->size || !mask->size || mask->size + dir->size + (dir->ptr[dir->size -1] != '/') + 1U > sizeof(buf)) return -1;
+	if(!dir || !dir->size) dir = SPL("./");
+	
+	if(!l || !mask || !mask->size || mask->size + dir->size + (dir->ptr[dir->size -1] != '/') + 1U > sizeof(buf)) return -1;
 	memcpy(buf, dir->ptr, dir->size);
 	o = buf + dir->size;
 	if(dir->ptr[dir->size -1] != '/') {
@@ -64,6 +67,9 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 				}
 				s->size = (s->ptr + s->size) - o;
 				s->ptr = o;
+			} else {
+				// this should never happen, since we exchange an empty dir with "./"
+				goto err;
 			}
 			if(flags & FLF_INCLUDE_HIDDEN && s->ptr[0] == '.') {
 				if(
