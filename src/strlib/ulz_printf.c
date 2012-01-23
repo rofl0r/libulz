@@ -3,7 +3,7 @@
 #include "../../include/strlib.h"
 
 void ulz_printf(const char* fmt, ...) {
-	char dest[512];
+	char dest[4096];
 	va_list ap;
 	va_start(ap, fmt);
 	ssize_t result = ulz_vsnprintf(dest, sizeof(dest), fmt, ap);
