@@ -48,7 +48,7 @@ static uint32_t T0[256];
 static uint32_t T1[256];
 static uint32_t T2[256];
 static uint32_t T3[256];
-static int initdone = 0;
+
 /**
  * reverse(x):
  * Return x with reversed bit-order.
@@ -64,14 +64,20 @@ static uint32_t reverse(uint32_t x) {
 	return (x);
 }
 
-
 /**
- * init(void):
+ * CRC32C_InitTables(void):
  * Initialize tables.
+ * Call this once on program startup before any thread that uses CRC starts.
  */
-static void init(void) {
+void CRC32C_InitTables(void) {
 	size_t i, j, k;
 	uint32_t r;
+	
+	T[0] = T0;
+	T[1] = T1;
+	T[2] = T2;
+	T[3] = T3;
+	
 	/* Fill in tables. */
 	for (i = 0; i < 256; i++) {
 		r = reverse(i);
@@ -92,19 +98,7 @@ static void init(void) {
  * Initialize a CRC32C-computing context.  This function can only fail the
  * first time it is called.
  */
-int
-CRC32C_Init(CRC32C_CTX * ctx)
-{
-	
-	if(!initdone) {
-		T[0] = T0;
-		T[1] = T1;
-		T[2] = T2;
-		T[3] = T3;
-		
-		init();
-		initdone = 1;
-	}
+int CRC32C_Init(CRC32C_CTX * ctx) {
 
 	/* Set state to the CRC of the implicit leading 1 bit. */
 	ctx->state = T_0_0x80;
@@ -118,9 +112,7 @@ CRC32C_Init(CRC32C_CTX * ctx)
  * Feed ${len} bytes from the buffer ${buf} into the CRC32C being computed
  * via the context ${ctx}.
  */
-void
-CRC32C_Update(CRC32C_CTX * ctx, const uint8_t * buf, size_t len)
-{
+void CRC32C_Update(CRC32C_CTX * ctx, const uint8_t * buf, size_t len) {
 
 	/* Handle blocks of 4 bytes. */
 	for (; len >= 4; len -= 4, buf += 4) {
@@ -145,9 +137,7 @@ CRC32C_Update(CRC32C_CTX * ctx, const uint8_t * buf, size_t len)
  * significant bit of the byte in the lowest address, is a product of the
  * Castagnoli polynomial.
  */
-void
-CRC32C_Final(uint8_t cbuf[4], CRC32C_CTX * ctx)
-{
+void CRC32C_Final(uint8_t cbuf[4], CRC32C_CTX * ctx) {
 
 	/* Copy state out. */
 	cbuf[0] = ctx->state & 0xff;

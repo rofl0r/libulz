@@ -13,6 +13,13 @@ typedef struct CRC32CContext {
 } CRC32C_CTX;
 
 /**
+ * CRC32C_InitTables(void):
+ * Initialize tables.
+ * Call this once on program startup before any thread that uses CRC starts.
+ */
+void CRC32C_InitTables(void);
+
+/**
  * CRC32C_Init(ctx):
  * Initialize a CRC32C-computing context.  This function can only fail the
  * first time it is called.
