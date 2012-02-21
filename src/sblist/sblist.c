@@ -37,8 +37,10 @@ void sblist_free_items(sblist* l) {
 }
 
 void sblist_free(sblist* l) {
-	sblist_free_items(l);
-	free(l);
+	if(l) {
+		sblist_free_items(l);
+		free(l);
+	}
 }
 
 char* sblist_item_from_index(sblist* l, size_t idx) {
