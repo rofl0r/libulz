@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,6 +46,7 @@ typedef struct {
 #define CHOMP(X) stringptr_chomp(X)
 #endif
 
+uint32_t stringptr_hash(stringptr* str);
 int stringptr_here(stringptr* haystack, size_t bufpos, stringptr* needle);
 stringptr* stringptr_new(size_t size);
 stringptr* stringptr_concat(stringptr* self, ...);
