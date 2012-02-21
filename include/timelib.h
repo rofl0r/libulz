@@ -1,6 +1,8 @@
 #ifndef TIMELIB_H
 #define TIMELIB_H
 
+#undef _GNU_SOURCE
+#define _GNU_SOURCE
 #undef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
 #undef _BSD_SOURCE
