@@ -31,8 +31,12 @@ sblist* hashlist_get(hashlist* h, uint32_t hash) {
 
 void hashlist_free(hashlist* h) {
 	size_t i;
-	for(i = 0; i < h->bucketcount; i++) {
-		if(h->buckets[i]) sblist_free(h->buckets[i]);
+	if(h) {
+		for(i = 0; i < h->bucketcount; i++) {
+			if(h->buckets[i]) sblist_free(h->buckets[i]);
+		}
+		free(h->buckets);
+		free(h);
 	}
 }
 
