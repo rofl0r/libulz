@@ -24,6 +24,7 @@ typedef struct {
 } hashlist_iterator;
 
 hashlist* hashlist_new(uint32_t bucketcount, uint32_t datasize);
+/* returns -1 on error, 0 on success */
 int hashlist_add(hashlist* h, uint32_t hash, void* value);
 sblist* hashlist_get(hashlist* h, uint32_t hash);
 void hashlist_free(hashlist* h);
