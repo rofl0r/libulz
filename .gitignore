@@ -10,4 +10,4 @@ examples/conpix_linux_x64_static
 examples/conpix_scroll
 examples/iniparser_test
 examples/optparser_test
-
+config.mak
