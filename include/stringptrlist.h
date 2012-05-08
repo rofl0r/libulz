@@ -12,26 +12,37 @@ extern "C" {
 #define stringptrlist sblist
 #define stringptrlist_new(X) sblist_new(sizeof(stringptr), (X))
 #define stringptrlist_free(X) sblist_free(X)
-//int stringptrlist_add(stringptrlist** l, char* s, size_t len);
-#define stringptrlist_add(X, Y, Z) sblist_add((X), SPMAKE((Y), (Z)))
-//int stringptrlist_set(stringptrlist* l, size_t itemnumber, char* buf, size_t buflen);
-#define stringptrlist_set(W, X, Y, Z) sblist_set((W), SPMAKE((Y), (Z)), (X))
-//stringptr* stringptrlist_get(stringptrlist* l, size_t itemnumber);
-#define stringptrlist_get(X, Y) ((stringptr*) (sblist_get((X), (Y))))
-#define stringptrlist_getsize(X) ((X)->count)
-// parses line of a textfile.
-// it returns a list of stringptrs. however they have not to be freed separately
-// since they're alloced together with the list.
-// also, '\n' in the original buffer will be replaced with '\0'
+
+/* the reason _add takes a ptr, len tuple is that it is often needed/more efficient
+ * to have the string separately allocated.
+ * also, stringptr_new returns a single allocated
+ * memory buffer, where the ptr member points to the buffer past the struct header.
+ * so we'd need a separate free method which recalculates the original stringptr, since
+ * sblist_add dereferences the stringptr and stores only its contents. and that is quite
+ * nasty and inviting bugs. */
+#define stringptrlist_add(list, charptr, len) sblist_add((list), SPMAKE((charptr), (len)))
+#define stringptrlist_add_strdup(list, strptr) \
+	stringptrlist_add((list), stringptr_strdup((strptr)), stringptr_getsize((strptr)))
+
+#define stringptrlist_set(list, itemnumber, charptr, len) \
+	sblist_set((list), SPMAKE((charptr), (len)), (itemnumber))
+  
+#define stringptrlist_get(list, itemnumber) \
+	((stringptr*) (sblist_get((list), (itemnumber))))
+	
+#define stringptrlist_getsize(X) sblist_getsize(X)
+#define stringptrlist_empty(X) sblist_empty(X)
+
+/* parses lines of a stringptr.
+ * it returns a stringptrlist. contents will point into the orginal buffer.
+ * that means that the stringptr has to stay alive as long as the list.
+ * and that the stringptrs in the list dont have to be freed.
+ * 
+ * also, '\n' in the original buffer will be replaced with '\0' */
 #define stringptr_linesplit(b) stringptr_splitc(b, '\n')
-
-
 
 stringptrlist* stringptr_splitc(stringptr* buf, int delim);
 stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
-
-//stringptrlist* stringptrlist_resize(stringptrlist* list, size_t items);
-
 
 // logically belonging to stringptr.c, but needs list to operate
 stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
@@ -39,7 +50,13 @@ stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
 stringptr* stringptrlist_tostring(stringptrlist* l);
 stringptr* stringptrlist_tostring_dos(stringptrlist* l);
+
+/* freestrings frees the char* ptr's contained in a list.
+ * note that it doesn't free a stringptr allocated via stringptr_new.
+ * calling this on such an allocated stringptr would crash when 
+ * calling free(). */
 void stringptrlist_freestrings(stringptrlist* l);
+/* calls stringptrlist_freestrings, then frees the list itself. */
 void stringptrlist_freeall(stringptrlist* l);
 
 /* duplicates all stringptr's in the list. returns -1 on success, or the index of the failed item on failure.

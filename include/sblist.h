@@ -4,10 +4,15 @@
 #include <stddef.h>
 
 /*
+ * simple buffer list.
  * 
  * this thing here is basically a generic dynamic array
  * will realloc after every blockitems inserts
- * can store items of any size
+ * can store items of any size.
+ * 
+ * so think of it as a by-value list, as opposed to a typical by-ref list.
+ * you typically use it by having some struct on the stack, and pass a pointer
+ * to sblist_add, which will copy the contents into its internal memory.
  * 
  */
 
@@ -21,6 +26,7 @@ typedef struct {
 
 #define sblist_getsize(X) ((X)->count)
 #define sblist_get_count(X) ((X)->count)
+#define sblist_empty(X) ((X)->count == 0)
 
 // for dynamic style
 sblist* sblist_new(size_t itemsize, size_t blockitems);

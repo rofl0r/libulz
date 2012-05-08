@@ -36,6 +36,8 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 		return -1;
 	}
 	if(!(flags & FLF_INCLUDE_HIDDEN)) {
+		// the strings in the filelist are managed by glob, we dont free them ourselves.
+		// so its save to add string literals.
 		if(flags & FLF_INCLUDE_DOT) stringptrlist_add(l->files, "./", 2);
 		if(flags & FLF_INCLUDE_DOT_DOT) stringptrlist_add(l->files, "../", 3);
 	}
