@@ -13,6 +13,9 @@
 #include <stddef.h>
 #include <limits.h>
 
+#define BYTEM(msb, b6, b5, b4, b3, b2, b1, lsb) ((unsigned char)(lsb | b1 << 1 | b2 << 2 | b3 << 3 | b4 << 4 | b5 << 5 | b6 << 6 | msb << 7))
+#define BYTEL(lsb, b1, b2, b3, b4, b5, b6, msb) ((unsigned char)(lsb | b1 << 1 | b2 << 2 | b3 << 3 | b4 << 4 | b5 << 5 | b6 << 6 | msb << 7))
+
 #define BA_SIZE_REQUIRED(X) (((X) / CHAR_BIT) + !!((X) % CHAR_BIT))
 #define BA_TARGET_BYTE(X, Y) ((X) + ((Y) / CHAR_BIT))
 #define BA_BIT_DISTANCE(X, Y) ((Y) % CHAR_BIT)
