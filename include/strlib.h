@@ -22,6 +22,21 @@ extern "C" {
 #include <stdarg.h>
 #include <unistd.h>
 
+#ifdef __GNUC__
+/* format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK) 
+   ARCHETYPE is printf, scanf, strftime or strfmon
+   STRING-INDEX is index of format string (starting with 1)
+   FIRST-TO-CHECK is index of first argument to check (-"-)  
+   http://ohse.de/uwe/articles/gcc-attributes.html#func-format */
+#  define PRINTF_FORMAT1 __attribute__ ((format (printf, 1, 2)))
+#  define PRINTF_FORMAT2 __attribute__ ((format (printf, 2, 3)))
+#  define PRINTF_FORMAT3 __attribute__ ((format (printf, 3, 4)))
+#else
+#  define PRINTF_FORMAT1
+#  define PRINTF_FORMAT2
+#  define PRINTF_FORMAT3
+#endif
+
 typedef enum {
 	NTS_NONE = 0,
 	NTS_PAD = 1,
@@ -51,10 +66,12 @@ char* strdup_n(char* str, size_t len);
 char* strstr_uc(char* haystack, char* needle, size_t needlesize);
 char* strstar(const char* haystack, const char* needle, size_t needlesize);
 char* findword(char* buf, char* word_uc, size_t word_len);
+
+void ulz_printf(const char* fmt, ...) PRINTF_FORMAT1;
+void ulz_fprintf(int fd, const char* fmt, ...) PRINTF_FORMAT2;
+ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...) PRINTF_FORMAT3;
 ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list ap);
-ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...);
-void ulz_printf(const char* fmt, ...);
-void ulz_fprintf(int fd, const char* fmt, ...);
+
 int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr);
 void stringfromipv4(unsigned char* ip_buf_4_bytes, char* outbuf_16_bytes);
 int isnumericipv4(const char* ipstring);

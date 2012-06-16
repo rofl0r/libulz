@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include "../../include/strlib.h"
 
+PRINTF_FORMAT3
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);

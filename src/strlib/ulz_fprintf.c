@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "../../include/strlib.h"
 
+PRINTF_FORMAT2
 void ulz_fprintf(int fd, const char* fmt, ...) {
 	char dest[4096];
 	va_list ap;
