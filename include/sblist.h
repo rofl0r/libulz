@@ -46,6 +46,9 @@ char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
 
+#ifndef __COUNTER__
+#define __COUNTER__ __LINE__
+#endif
 
 #define __sblist_concat_impl( x, y ) x##y
 #define __sblist_macro_concat( x, y ) __sblist_concat_impl( x, y )
