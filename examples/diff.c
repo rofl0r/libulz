@@ -1,6 +1,6 @@
-#include "../lib/include/stringptr.h"
-#include "../lib/include/strlib.h"
-#include "../lib/include/logger.h"
+#include "../include/stringptr.h"
+#include "../include/strlib.h"
+#include "../include/logger.h"
 #include <inttypes.h>
 #include <stddef.h>
 #include <string.h>
