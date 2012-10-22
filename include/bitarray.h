@@ -20,12 +20,15 @@
 #define BA_TARGET_BYTE(X, Y) ((X) + ((Y) / CHAR_BIT))
 #define BA_BIT_DISTANCE(X, Y) ((Y) % CHAR_BIT)
 #define BA_GET(X, Y) (!!( *BA_TARGET_BYTE(X, Y) & (1 << BA_BIT_DISTANCE(X, Y)) ))
+#define BA_GET_SWAPPED(X, Y) BA_GET( (X) , (((Y) / CHAR_BIT) * CHAR_BIT) + ((CHAR_BIT - 1) - ((Y) % CHAR_BIT)) )
+
 #define BA_SET_TRUE(X, Y) do { \
 			*(BA_TARGET_BYTE(X, Y)) |= (1 << BA_BIT_DISTANCE(X, Y)); \
-			} while(0);
+			} while(0)
 #define BA_SET_FALSE(X, Y) do { \
 			*(BA_TARGET_BYTE(X, Y)) &= ~(1 << BA_BIT_DISTANCE(X, Y)); \
-			} while(0);
+			} while(0)
+#define BA_SET(BITARR, INDEX, COND) do { if(COND) BA_SET_TRUE(BITARR, INDEX); else BA_SET_FALSE(BITARR, INDEX); } while(0)
 			
 #endif
 
