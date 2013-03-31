@@ -50,6 +50,7 @@ stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
 stringptr* stringptrlist_tostring(stringptrlist* l);
 stringptr* stringptrlist_tostring_dos(stringptrlist* l);
+int stringptrlist_tofile(stringptrlist* l, char* filename, int mode);
 
 /* freestrings frees the char* ptr's contained in a list.
  * note that it doesn't free a stringptr allocated via stringptr_new.
