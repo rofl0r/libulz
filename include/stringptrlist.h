@@ -46,6 +46,7 @@ stringptrlist* stringptr_splits(stringptr* buf, stringptr* delim);
 // logically belonging to stringptr.c, but needs list to operate
 stringptr* stringptr_replace(stringptr* buf, stringptr* what, stringptr* whit);
 
+ssize_t stringptrlist_find(stringptrlist* list, stringptr* what);
 int stringptrlist_contains(stringptrlist* list, stringptr* what);
 stringptr* stringptrlist_tostring(stringptrlist* l);
 stringptr* stringptrlist_tostring_dos(stringptrlist* l);
