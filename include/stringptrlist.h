@@ -21,8 +21,7 @@ extern "C" {
  * sblist_add dereferences the stringptr and stores only its contents. and that is quite
  * nasty and inviting bugs. */
 #define stringptrlist_add(list, charptr, len) sblist_add((list), SPMAKE((charptr), (len)))
-#define stringptrlist_add_strdup(list, strptr) \
-	stringptrlist_add((list), stringptr_strdup((strptr)), stringptr_getsize((strptr)))
+int stringptrlist_add_strdup(stringptrlist* l, stringptr* s);
 
 #define stringptrlist_set(list, itemnumber, charptr, len) \
 	sblist_set((list), SPMAKE((charptr), (len)), (itemnumber))
