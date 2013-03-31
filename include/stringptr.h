@@ -22,6 +22,8 @@ typedef struct {
 	size_t size;
 } stringptr;
 
+
+#define SPNIL ((stringptr*) 0)
 #define SP_INIT(X, Y) {X, Y}
 #ifdef IN_KDEVELOP_PARSER
 /* KDevelop cant handle some sort of C99 compound statements.
