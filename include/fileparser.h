@@ -14,7 +14,7 @@ typedef struct {
 } fileparser;
 
 // success: 0
-int fileparser_open(fileparser* parser, char* filename);
+int fileparser_open(fileparser* parser, const char* filename);
 // success:0, buffer to small: -3
 int fileparser_readline(fileparser* parser);
 // success: 0
