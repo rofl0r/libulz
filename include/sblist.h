@@ -1,6 +1,10 @@
 #ifndef SBLIST_H
 #define SBLIST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 
 /*
@@ -60,6 +64,10 @@ int sblist_insert(sblist* l, void* item, size_t pos);
 
 // uses "magic" iterator variable
 #define sblist_iter(LIST, PTR) sblist_iter_counter(LIST, __sblist_iterator_name, PTR)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
