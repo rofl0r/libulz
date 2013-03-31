@@ -18,6 +18,8 @@ typedef struct {
 	variotype type;
 } vario;
 
+#define VNIL ((vario*) 0)
+
 #define VARIO_STRINGPTR_PTR(X) (&(stringptr*){X})
 #define VARIO_CHAR_STAR_PTR(X) (&(char*){X})
 #define VARIO_CONST_CHAR_STAR_PTR(X) (&(const char*){X})
