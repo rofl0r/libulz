@@ -61,6 +61,16 @@ int sblist_insert(sblist* l, void* item, size_t pos);
 // use with custom iterator variable
 #define sblist_iter_counter(LIST, ITER, PTR) size_t ITER; \
 	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
+		
+// use with custom iterator variable, which is predeclared
+#define sblist_iter_counter2(LIST, ITER, PTR) \
+	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
+
+// use with custom iterator variable, which is predeclared and signed
+// useful for a loop which can delete items from the list, and then decrease the iterator var.
+#define sblist_iter_counter2s(LIST, ITER, PTR) \
+	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < (ssize_t) sblist_getsize(LIST); ITER++)
+
 
 // uses "magic" iterator variable
 #define sblist_iter(LIST, PTR) sblist_iter_counter(LIST, __sblist_iterator_name, PTR)
