@@ -5,10 +5,9 @@
 # Do not make changes here.
 #
 
-exec_prefix = /usr/local
-bindir = $(exec_prefix)/bin
-
 prefix = /usr/local/
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
 
@@ -34,7 +33,7 @@ ALL_LIBS = $(ULZ_LIBS)
 
 all: $(ALL_LIBS)
 
-install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
+install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/ulz/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
 
 clean:
 	rm -f crt/*.o
@@ -52,6 +51,9 @@ lib/libulz.a: $(OBJS)
 
 lib/%.o:
 	cp $< $@
+
+$(DESTDIR)$(includedir)/ulz%: include/%
+	install -D $< $@
 
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
