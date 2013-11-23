@@ -1,3 +1,5 @@
+#undef _BSD_SOURCE
+#define _BSD_SOURCE /* for timersub */
 #include "../../include/timelib.h"
 #include <sys/time.h>
 
