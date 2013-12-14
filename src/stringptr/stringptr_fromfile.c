@@ -1,8 +1,10 @@
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#include <fcntl.h>
 #include <unistd.h>
 #include "../../include/stringptr.h"
 #include "../../include/filelib.h"
 #include <sys/stat.h>
-#include <fcntl.h>
 
 stringptr* stringptr_fromfile(char* filename) {
 	int f;
@@ -12,11 +14,11 @@ stringptr* stringptr_fromfile(char* filename) {
 	size_t bytesleft;
 	ssize_t bread = 0;
 	if(!size) return NULL;
-	f = open(filename, O_RDONLY);
+	f = open(filename, O_RDONLY|O_CLOEXEC);
 	if(f == -1) return NULL;
 	buf = stringptr_new(size);
 	if (!buf) goto FEXIT;
-	
+
 	while(bufpos < size) {
 		bytesleft = size - bufpos;
 		if((bread = read(f, buf->ptr + bufpos, bytesleft > 64*1024 ? 64*1024 : bytesleft)) < 0) {
