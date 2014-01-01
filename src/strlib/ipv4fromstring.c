@@ -8,7 +8,7 @@ int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr) {
 			fourbytesptr[outbyte] = strtoint(start, ipstring - start);
 			start = ipstring + 1;
 			outbyte++;
-		} 
+		}
 		if(!*ipstring && outbyte < 4) return 0;
 		ipstring++;
 	}
