@@ -49,6 +49,7 @@ void sblist_delete(sblist* l, size_t item);
 char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
+void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
 
 #ifndef __COUNTER__
 #define __COUNTER__ __LINE__
