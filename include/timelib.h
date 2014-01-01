@@ -16,6 +16,8 @@ int microsleep(long microsecs);
 size_t timestamp(char* buffer, size_t bufsize);
 long mspassed(struct timeval* t);
 void gettimestamp(struct timeval* t);
+/* return actual system time in usec granularity */
+long long getutime(void);
 
 #endif
 
