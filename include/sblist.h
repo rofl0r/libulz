@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stddef.h>
-
 /*
  * simple buffer list.
  * 
@@ -50,6 +49,8 @@ char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
 void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
+/* insert element into presorted list, returns listindex of new entry or -1*/
+size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, const void *));
 
 #ifndef __COUNTER__
 #define __COUNTER__ __LINE__
