@@ -34,6 +34,7 @@ typedef struct {
 #define SPMAKE(X, Y) NULL
 #else
 #define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
+#define SPINITIALIZER(X) {X, sizeof(X) - 1}
 #define SPMAKE(X, Y) &(stringptr){(X), (Y)}
 #endif
 #define SPDECLAREC(X, Y) stringptr X##_storage, *X = stringptr_fromchar(Y, &X##_storage)
