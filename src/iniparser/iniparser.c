@@ -8,7 +8,7 @@
 #include <string.h>
 #include "../../include/iniparser.h"
 
-ini_section iniparser_get_section_at(stringptrlist* inifile, stringptr* sectionname, size_t startline) {
+ini_section iniparser_get_section_at(stringptrlist* inifile, const stringptr* sectionname, size_t startline) {
 	ini_section result = {0, 0};
 	stringptr* line;
 	size_t i;
@@ -33,11 +33,11 @@ ini_section iniparser_get_section_at(stringptrlist* inifile, stringptr* sectionn
 	return result;
 }
 
-ini_section iniparser_get_section(stringptrlist* inifile, stringptr* sectionname) {
+ini_section iniparser_get_section(stringptrlist* inifile, const stringptr* sectionname) {
 	return iniparser_get_section_at(inifile, sectionname, 0);
 }
 
-ini_section iniparser_get_next_section(stringptrlist* inifile, stringptr* sectionname, ini_section* prev) {
+ini_section iniparser_get_next_section(stringptrlist* inifile, const stringptr* sectionname, ini_section* prev) {
 	return iniparser_get_section_at(inifile, sectionname, prev->startline + prev->linecount);
 }
 
@@ -48,7 +48,7 @@ ini_section iniparser_file_as_section(stringptrlist* inifile) {
 	return result;
 }
 
-ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result, size_t startline) {
+ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, const stringptr* key, stringptr* result, size_t startline) {
 	size_t i;
 	size_t maxline = section->startline + section->linecount;
 	stringptr* line;
@@ -65,6 +65,6 @@ ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, stri
 	return (ssize_t) -1;
 }
 
-void iniparser_getvalue(stringptrlist* inifile, ini_section* section, stringptr* key, stringptr* result) {
+void iniparser_getvalue(stringptrlist* inifile, ini_section* section, const stringptr* key, stringptr* result) {
 	iniparser_getvalue_at(inifile, section, key, result, section->startline);
 }
