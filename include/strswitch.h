@@ -22,9 +22,15 @@
 			     case '$': case '&': case '(': case ')': case '[': case ']': case '{': case '}': \
 			     case '<': case '>': case '#': case '~'
 
+/* non alphabetic characters which can safely (i.e. unescaped) be embedded inside a shell string literal */
+#define STRSWITCH_NON_ALPHA_SH STRSWITCH_MATH_OPS: case ' ': case '@': case ',': case ';': case '.': case ':': case '_':  case '!': \
+			     case '&': case '(': case ')': case '[': case ']': case '{': case '}': \
+			     case '<': case '>': case '#': case '~'
+
 #define STRSWITCH_NON_ALPHA STRSWITCH_NON_ALPHA_C: case '?': case '"': case '\'': case '\\'
 
 #define STRSWITCH_PRINTABLE STRSWITCH_ALPHA: case STRSWITCH_NON_ALPHA
 #define STRSWITCH_C_PRINTABLE STRSWITCH_ALPHA: case STRSWITCH_NON_ALPHA_C
+#define STRSWITCH_SH_PRINTABLE STRSWITCH_ALPHA: case STRSWITCH_NON_ALPHA_SH
 
 #endif
