@@ -61,9 +61,9 @@ size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, cons
 #define __sblist_iterator_name __sblist_macro_concat(sblist_iterator, __COUNTER__)
 
 // use with custom iterator variable
-#define sblist_iter_counter(LIST, ITER, PTR) size_t ITER; \
-	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
-		
+#define sblist_iter_counter(LIST, ITER, PTR) \
+	for(size_t ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
+
 // use with custom iterator variable, which is predeclared
 #define sblist_iter_counter2(LIST, ITER, PTR) \
 	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)

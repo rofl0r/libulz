@@ -15,7 +15,9 @@ SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 LOBJS = $(OBJS:.o=.lo)
 
-CFLAGS += -Os 
+CFLAGS += -Os
+CFLAGS_REQ=-std=c99
+
 #-ffreestanding -std=c99 -D_XOPEN_SOURCE=700 -pipe
 #LDFLAGS = -nostdlib -shared -fPIC -Wl,-e,_start -Wl,-Bsymbolic-functions
 INC     = -I./include
@@ -30,6 +32,8 @@ ULZ_LIBS = lib/libulz.a
 ALL_LIBS = $(ULZ_LIBS) 
 
 -include config.mak
+
+CFLAGS += $(CFLAGS_REQ)
 
 all: $(ALL_LIBS)
 
