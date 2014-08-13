@@ -60,6 +60,7 @@ typedef struct {
 
 uint32_t stringptr_hash(stringptr* str);
 int stringptr_here(stringptr* haystack, size_t bufpos, stringptr* needle);
+int stringptr_contains(stringptr* haystack, stringptr* needle);
 stringptr* stringptr_new(size_t size);
 stringptr* stringptr_concat(stringptr* self, ...);
 stringptr* stringptr_copy(stringptr* s);
