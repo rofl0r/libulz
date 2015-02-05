@@ -5,6 +5,9 @@
 #include "../../include/stringptr.h"
 #include "../../include/filelib.h"
 #include <sys/stat.h>
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
 
 stringptr* stringptr_fromfile(char* filename) {
 	int f;

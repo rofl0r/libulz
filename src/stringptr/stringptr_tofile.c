@@ -4,6 +4,9 @@
 #include "../../include/stringptr.h"
 #include <unistd.h>
 #include <sys/stat.h>
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
 
 size_t stringptr_tofile(char* filename, stringptr* buffer) {
 	static const size_t chunksize = 64*1024;
