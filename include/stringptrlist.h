@@ -76,4 +76,4 @@ void stringptrlist_sort(stringptrlist* l);
 #endif
 
 //RcB: DEP "../src/stringptrlist/*.c"
-
+//RcB: CFLAGS "-std=c99"
