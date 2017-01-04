@@ -82,6 +82,39 @@ int isnumericipv4(const char* ipstring);
 
 extern const char conv_cypher[];
 extern const size_t conv_cyper_len;
+extern const char base64_tbl[64];
+
+/* calculates number of bytes base64-encoded stream of N bytes will take. */
+#define BASE64ENC_BYTES(N) (((N+2)/3)*4)
+/* calculates the required output buffer size to base64-encode
+ * N bytes (equals BASE64ENC_BYTES + 1 byte for the zero terminator) */
+#define BASE64ENC_BUFSIZE(N) (1+BASE64ENC_BYTES(N))
+/* calculates number of bytes base64-decoding of a string of N bytes will
+   take. */
+#define BASE64DEC_BYTES(N) ((N/4)*3)
+/* bytes required for base64 decoded output from an input string of length N */
+#define BASE64DEC_BUFSIZE(N) (1+BASE64DEC_BYTES(N))
+
+/* base64 encodes count bytes of src into dest. dest must have at least
+   BASE64ENC_BUFSIZE(count) available bytes. you need to check the
+   dst buffersize yourself. */
+void base64enc(char *dst, unsigned const char* src, size_t count);
+
+/* decodes base64-encoded zero-terminated input string `src` into `dst`.
+   `dst` *should* have at least BASE64DEC_BUFSIZE(strlen(src)) bytes available.
+   buffersize of `dst` is passed using `dst_len`.
+   returns size of decoded buffer if successful,
+   0 if malformed input, no input, or buffer to small.
+   the returned size may be upto 2 bytes smaller than
+   BASE64DEC_BYTES(strlen(src)), if the input string ends with 2 padding
+   bytes (i.e. "==").
+   even though output can be binary, it will be zero-terminated for convenience.
+   so the output buffer needs to be 1 bigger than strictly necessary. */
+size_t base64dec(unsigned char* dst, const char *src, size_t dst_len);
+
+/* like base64enc, however for zero-terminated input. i.e. not suitable
+   for random binary data. */
+int base64enc_str(char *dst, unsigned const char* src, size_t dst_len);
 
 #ifdef __cplusplus
 }
