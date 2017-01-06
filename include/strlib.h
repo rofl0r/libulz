@@ -48,6 +48,9 @@ time_t getFileModTime(const char* filename);
 char* getFileExt(const char* filename, size_t fnlen);
 int containsChar(char* str, char what);
 int hexval(char* i);
+/* converts raw bytes into lowercase hex string.
+   dst buffer must be at least (len*2)+1 bytes. */
+void raw2hex(char *dst, const unsigned char *src, size_t len);
 int isAlpha(char* i);
 int isNumber(char* i);
 int isLetter(char* i);
