@@ -34,7 +34,7 @@
  * 
  */
 
-#include "strlib.h"
+#include "format.h"
 #include "logger.h"
 
 #define printf(...) ulz_printf(__VA_ARGS__)
