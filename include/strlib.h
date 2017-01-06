@@ -21,6 +21,7 @@ extern "C" {
 #include <time.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <string.h>
 
 #ifdef __GNUC__
 /* format (ARCHETYPE, STRING-INDEX, FIRST-TO-CHECK) 
