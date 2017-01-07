@@ -1,6 +1,6 @@
 #include <stdarg.h>
 #include <unistd.h>
-#include "../../include/strlib.h"
+#include "../../include/format.h"
 
 PRINTF_FORMAT1
 void ulz_printf(const char* fmt, ...) {

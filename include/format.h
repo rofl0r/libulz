@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <unistd.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>

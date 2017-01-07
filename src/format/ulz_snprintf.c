@@ -1,5 +1,5 @@
 #include <stdarg.h>
-#include "../../include/strlib.h"
+#include "../../include/format.h"
 
 PRINTF_FORMAT3
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...) {

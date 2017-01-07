@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include "../../include/vario.h"
 #include "../../include/strlib.h"
+#include "../../include/format.h"
 
 // lightweight sprintf replacement. supports width via %.2x and all int types, and %s, and %% for an escaped %
 // returns the number of bytes written to the target. should behave exactly as posix sprintf except %x also returns hex decimals in uppercase.
