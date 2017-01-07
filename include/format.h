@@ -25,6 +25,8 @@ extern "C" {
 #  define PRINTF_FORMAT3
 #endif
 
+#define ulz_dprintf ulz_fprintf
+
 void ulz_printf(const char* fmt, ...) PRINTF_FORMAT1;
 void ulz_fprintf(int fd, const char* fmt, ...) PRINTF_FORMAT2;
 ssize_t ulz_snprintf(char* dest, size_t destsize, const char* fmt, ...) PRINTF_FORMAT3;
