@@ -99,6 +99,8 @@ size_t base64dec(unsigned char* dst, const char *src, size_t dst_len);
    for random binary data. */
 int base64enc_str(char *dst, unsigned const char* src, size_t dst_len);
 
+void rc4(unsigned char* dst, const unsigned char* src, size_t len, const unsigned char* key, size_t keylen);
+
 #ifdef __cplusplus
 }
 #endif
