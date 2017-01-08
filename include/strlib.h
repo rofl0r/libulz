@@ -29,8 +29,6 @@ typedef enum {
 	NTS_LOWERCASE_CHARS = 4
 } numberToString_flags;
 
-time_t getFileModTime(const char* filename);
-char* getFileExt(const char* filename, size_t fnlen);
 int containsChar(char* str, char what);
 int hexval(char* i);
 /* converts raw bytes into lowercase hex string.
