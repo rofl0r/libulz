@@ -2,7 +2,7 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include <time.h>
-#include "../../include/strlib.h"
+#include "../../include/format.h"
 
 size_t timestamp(char* buffer, size_t bufsize) {
 	time_t secs = time(NULL);
