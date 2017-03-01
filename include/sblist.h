@@ -48,6 +48,8 @@ void sblist_delete(sblist* l, size_t item);
 char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
+/* same as sblist_add, but returns list index of new item, or -1 */
+size_t sblist_addi(sblist* l, void* item);
 void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
 /* insert element into presorted list, returns listindex of new entry or -1*/
 size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, const void *));
