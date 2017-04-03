@@ -34,6 +34,9 @@ int hexval(char* i);
 /* converts raw bytes into lowercase hex string.
    dst buffer must be at least (len*2)+1 bytes. */
 void raw2hex(char *dst, const unsigned char *src, size_t len);
+/* converts hex stream into raw bytes. output buffer must be
+   of size (strlen(hex)+1)/2. returns length of out. */
+size_t hex2raw(const char *hex, unsigned char* out);
 int isAlpha(char* i);
 int isNumber(char* i);
 int isLetter(char* i);
