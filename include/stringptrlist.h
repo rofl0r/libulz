@@ -32,6 +32,14 @@ int stringptrlist_add_strdup(stringptrlist* l, stringptr* s);
 #define stringptrlist_getsize(X) sblist_getsize(X)
 #define stringptrlist_empty(X) sblist_empty(X)
 
+#define stringptrlist_insert(list, pos, charptr, len) \
+        sblist_insert(list, SPMAKE((charptr), (len)), pos);
+/* insert element into presorted list, returns listindex of new entry or -1 */
+/* cmp is a comparefunc using the same signature as the one used by qsort */
+#define stringptrlist_insert_sorted(list, charptr, len, cmp) \
+        sblist_insert_sorted(list, SPMAKE((charptr), (len)), cmp);
+
+
 /* parses lines of a stringptr.
  * it returns a stringptrlist. contents will point into the orginal buffer.
  * that means that the stringptr has to stay alive as long as the list.
