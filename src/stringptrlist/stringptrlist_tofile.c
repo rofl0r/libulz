@@ -9,7 +9,7 @@ int stringptrlist_tofile(stringptrlist* l, char* filename, int mode) {
 	if(fd == -1) goto ret;
 	stringptr *s;
 	sblist_iter(l, s) {
-		if(write(fd, s->ptr, s->size) != s->size) goto err;
+		if(write(fd, s->ptr, s->size) != (ssize_t)s->size) goto err;
 		if(write(fd, "\n", 1) != 1) goto err;
 	}
 	success = 1;
