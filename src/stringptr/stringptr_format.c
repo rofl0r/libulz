@@ -1,5 +1,6 @@
 #include "../../include/stringptr.h"
 #include "../../include/strlib.h"
+#include "../../include/format.h"
 #include <stdarg.h>
 
 stringptr* stringptr_format(char* fmt, ...) {
