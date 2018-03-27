@@ -13,11 +13,15 @@ static size_t strleneq(const char* str) {
 
 char* op_get(op_state* p, stringptr* arg) {
 	size_t i, l;
+	char *s;
 	for(i = 1; i < p->argc; i++) {
-		if(p->argv[i][0] == '-') {
-			l = strleneq(p->argv[i] + 1);
-			if(l == arg->size && !memcmp(arg->ptr, p->argv[i] + 1, l))
-				return p->argv[i] + 1 + l + 1;
+		s = p->argv[i];
+		if(*s == '-') {
+			s++;
+			if(arg->size > 1 && *s == '-') s++;
+			l = strleneq(s);
+			if(l == arg->size && !memcmp(arg->ptr, s, l))
+				return s + l + 1;
 		}
 	}
 	return NULL;

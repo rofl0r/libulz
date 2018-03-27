@@ -2,10 +2,14 @@
 
 int op_hasflag(op_state* p, stringptr* flag) {
 	size_t i, l;
+	char* s;
 	for(i = 1; i < p->argc; i++) {
-		if(p->argv[i][0] == '-') {
-			l = strlen(p->argv[i] + 1);
-			if(l == flag->size && !memcmp(flag->ptr, p->argv[i] + 1, l))
+		s = p->argv[i];
+		if(*s == '-') {
+			s++;
+			if(flag->size > 1 && *s == '-') s++;
+			l = strlen(s);
+			if(l == flag->size && !memcmp(flag->ptr, s, l))
 				return 1;
 		}
 	}
