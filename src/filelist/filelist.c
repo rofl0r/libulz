@@ -6,6 +6,9 @@ int errfunc(const char *epath, int eerrno) {
 	return 0;
 }
 */
+#ifndef GLOB_PERIOD /* FreeBSD */
+#define GLOB_PERIOD 0
+#endif
 // returns 0 on success, -1 on alloc or pointer failure, otherwise glob errors as defined in man 3p glob
 // dir can be NULL or empty, this chooses the local directory then.
 int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
