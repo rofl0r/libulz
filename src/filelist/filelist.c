@@ -1,4 +1,6 @@
+#define _BSD_SOURCE
 #include <string.h>
+#include <limits.h>
 #include "../../include/filelist.h"
 
 /*
@@ -6,25 +8,43 @@ int errfunc(const char *epath, int eerrno) {
 	return 0;
 }
 */
+/* we need to escape special characters that glob would otherwise interprete */
+static size_t cpystr_escape(char *out, const char *in, size_t in_size)
+{
+	size_t out_size = 0;
+	while(in_size && out_size + 2 < PATH_MAX) {
+		if(*in == '[' || *in == '?' || *in == '*') {
+			*(out++) = '\\';
+			out_size++;
+		}
+		*(out++) = *(in++);
+		in_size--;
+		out_size++;
+	}
+	if(in_size || out_size >= PATH_MAX)
+		return (size_t) -1;
+	return out_size;
+}
 #ifndef GLOB_PERIOD /* FreeBSD */
 #define GLOB_PERIOD 0
 #endif
 // returns 0 on success, -1 on alloc or pointer failure, otherwise glob errors as defined in man 3p glob
 // dir can be NULL or empty, this chooses the local directory then.
 int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
-	char buf[256];
+	char buf[PATH_MAX];
 	char *o;
 	int ret;
 	size_t i;
 	stringptr temp, *s = &temp;
 	int isdir;
 	int defaultflags = (flags & FLF_INCLUDE_HIDDEN) ? GLOB_PERIOD : 0;
-	
+
 	if(!dir || !dir->size) dir = SPL("./");
-	
+
 	if(!l || !mask || !mask->size || mask->size + dir->size + (dir->ptr[dir->size -1] != '/') + 1U > sizeof(buf)) return -1;
-	memcpy(buf, dir->ptr, dir->size);
-	o = buf + dir->size;
+	i = cpystr_escape(buf, dir->ptr, dir->size);
+	if(i == (size_t) -1 || i + mask->size + 2 >= sizeof buf) return -1;
+	o = buf + i;
 	if(dir->ptr[dir->size -1] != '/') {
 		*o = '/';
 		o++;
@@ -32,7 +52,7 @@ int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags) {
 	memcpy(o, mask->ptr, mask->size);
 	o += mask->size;
 	*o = 0;
-	if((ret = glob(buf, defaultflags | GLOB_MARK | GLOB_NOESCAPE, NULL, &l->pglob))) return ret;
+	if((ret = glob(buf, defaultflags | GLOB_MARK, NULL, &l->pglob))) return ret;
 	if(!(l->files = stringptrlist_new(l->pglob.gl_pathc))) {
 		err:
 		globfree(&l->pglob);
