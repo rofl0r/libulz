@@ -106,6 +106,6 @@ void rc4(unsigned char* dst, const unsigned char* src, size_t len, const unsigne
 }
 #endif
 
-#endif
+#pragma RcB2 DEP "../src/strlib/*.c"
 
-//RcB: DEP "../src/strlib/*.c"
+#endif

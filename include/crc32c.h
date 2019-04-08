@@ -42,7 +42,7 @@ void CRC32C_Update(CRC32C_CTX *, const uint8_t *, size_t);
  */
 void CRC32C_Final(uint8_t[4], CRC32C_CTX *);
 
-#endif /* !_CRC32C_H_ */
+#pragma RcB2 DEP "../src/crc32/crc32c.c"
 
-//RcB: DEP "../src/crc32/crc32c.c"
+#endif /* !_CRC32C_H_ */
 

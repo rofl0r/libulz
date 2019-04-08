@@ -34,6 +34,6 @@ sblist* hashlist_bucket_next(hashlist* h, hashlist_bucket_iterator* iter);
 void hashlist_iterator_init(hashlist_iterator* iter);
 void* hashlist_next(hashlist* h, hashlist_iterator* iter);
 
-//RcB: DEP "../src/hashlist/*.c"
+#pragma RcB2 DEP "../src/hashlist/*.c"
 
 #endif

@@ -35,6 +35,6 @@ void op_printall(op_state* p);
 }
 #endif
 
-#endif
+#pragma RcB2 DEP "../src/optparser/*.c"
 
-//RcB: DEP "../src/optparser/*.c"
+#endif

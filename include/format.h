@@ -36,7 +36,7 @@ ssize_t ulz_vsnprintf(char* dest, size_t destsize, const char* format, va_list a
 }
 #endif
 
-#endif
+#pragma RcB2 DEP "../src/format/*.c"
 
-//RcB: DEP "../src/format/*.c"
+#endif
 

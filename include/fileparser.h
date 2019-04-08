@@ -26,6 +26,6 @@ ssize_t fileparser_getnextlinelength(fileparser* parser);
 // success:0, buffer to small: -3
 int fileparser_readline_userbuf(fileparser* parser, char* buf, size_t bufsize);
 
-#endif
+#pragma RcB2 DEP "../src/fileparser/*.c"
 
-//RcB: DEP "../src/fileparser/*.c"
+#endif

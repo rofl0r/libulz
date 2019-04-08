@@ -25,7 +25,7 @@ typedef enum {
 int filelist_search(filelist* l, stringptr* dir, stringptr* mask, int flags);
 void filelist_free(filelist* l);
 
-#endif
+#pragma RcB2 DEP "../src/filelist/*.c"
 
-//RcB: DEP "../src/filelist/*.c"
+#endif
 

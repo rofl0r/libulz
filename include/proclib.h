@@ -18,6 +18,6 @@ int process_open(struct process *p, char* const argv[]);
 /* closes pipes, waits for process to exit, returns exitcode */
 int process_close(struct process *p);
 
-#endif
+#pragma RcB2 DEP "../src/proclib/*.c"
 
-//RcB: DEP "../src/proclib/*.c"
+#endif

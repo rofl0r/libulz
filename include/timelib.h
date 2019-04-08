@@ -19,6 +19,6 @@ void gettimestamp(struct timeval* t);
 /* return actual system time in usec granularity */
 long long getutime(void);
 
-#endif
+#pragma RcB2 DEP "../src/timelib/*.c"
 
-//RcB: DEP "../src/timelib/*.c"
+#endif

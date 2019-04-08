@@ -83,6 +83,6 @@ size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, cons
 }
 #endif
 
-#endif
+#pragma RcB2 DEP "../src/sblist/*.c"
 
-//RcB: DEP "../src/sblist/*.c"
+#endif

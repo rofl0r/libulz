@@ -20,7 +20,7 @@ void log_timestamp(int fd);
 #define log_perror(E) log_puterror(2, (E))
 #define log_putspace(X) log_puts(X, SPL(" "))
 
-#endif
+#pragma RcB2 DEP "../src/logger/*.c"
 
-//RcB: DEP "../src/logger/*.c"
+#endif
 

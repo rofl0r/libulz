@@ -26,7 +26,7 @@ void iniparser_getvalue(stringptrlist* inifile, ini_section* section, const stri
 ssize_t iniparser_getvalue_at(stringptrlist* inifile, ini_section* section, const stringptr* key, stringptr* result, size_t startline);
 size_t iniparser_count_sections(stringptrlist* inifile);
 
-#endif
+#pragma RcB2 DEP "../src/iniparser/*.c"
 
-//RcB: DEP "../src/iniparser/*.c"
+#endif
 

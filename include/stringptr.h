@@ -85,8 +85,7 @@ stringptr read_stdin_line(char* buf, size_t bufsize, int chomp);
 }
 #endif
 
+#pragma RcB2 DEP "../src/stringptr/stringptr_*.c"
+#pragma RcB2 DEP "../src/stringptr/read_stdin_line.c"
+
 #endif
-
-//RcB: DEP "../src/stringptr/stringptr_*.c"
-//RcB: DEP "../src/stringptr/read_stdin_line.c"
-

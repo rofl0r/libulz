@@ -81,7 +81,7 @@ void stringptrlist_sort(stringptrlist* l);
 }
 #endif
 
-#endif
+#pragma RcB2 DEP "../src/stringptrlist/*.c"
+#pragma RcB2 CFLAGS "-std=c99"
 
-//RcB: DEP "../src/stringptrlist/*.c"
-//RcB: CFLAGS "-std=c99"
+#endif

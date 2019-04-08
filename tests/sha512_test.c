@@ -6,7 +6,7 @@
 #include "../include/stringptr.h"
 #include "../include/sha512.h"
 
-//RcB: CFLAGS "-DTEST_SHA512"
+#pragma RcB2 CFLAGS "-DTEST_SHA512"
 
 /* compile with rcb --force */
 

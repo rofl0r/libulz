@@ -15,6 +15,6 @@ char* ulz_mkdtemp(char* templ);
 size_t mktempdir(const char* prefix, char* buffer, size_t bufsize);
 char* getfilename(stringptr* path);
 
-#endif
+#pragma RcB2 DEP "../src/filelib/*.c"
 
-//RcB: DEP "../src/filelib/*.c"
+#endif

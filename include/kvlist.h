@@ -29,6 +29,6 @@ typedef struct {
 
 int kv_find(kvlist* list, stringptr* what, void** value);
 
-#endif
+#pragma RcB2 DEP "../src/kvlist/*.c"
 
-//RcB: DEP "../src/kvlist/*.c"
+#endif
