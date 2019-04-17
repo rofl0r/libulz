@@ -1,7 +1,7 @@
 #ifndef VARIO_H
 #define VARIO_H
 
-#include "stringptr.h"
+#include "stringptr_struct.h"
 
 typedef enum {
 	VT_STRINGPTR,

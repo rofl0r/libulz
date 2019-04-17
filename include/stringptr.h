@@ -17,26 +17,8 @@
 extern "C" {
 #endif
 
-typedef struct {
-	char *ptr;
-	size_t size;
-} stringptr;
+#include "stringptr_struct.h"
 
-
-#define SPNIL ((stringptr*) 0)
-#define SP_INIT(X, Y) {X, Y}
-#ifdef IN_KDEVELOP_PARSER
-/* KDevelop cant handle some sort of C99 compound statements.
- * if you use one in your code, the parser goes mad
- * and nothing except raw editing will work anymore.
- * no autocompletion, syntax highlighting ...*/
-#define SPLITERAL(X) NULL
-#define SPMAKE(X, Y) NULL
-#else
-#define SPLITERAL(X) &(stringptr){(X), (sizeof((X)) - 1)}
-#define SPINITIALIZER(X) {X, sizeof(X) - 1}
-#define SPMAKE(X, Y) &(stringptr){(X), (Y)}
-#endif
 #define SPDECLAREC(X, Y) stringptr X##_storage, *X = stringptr_fromchar(Y, &X##_storage)
 
 #define stringptr_grow(a, b) (stringptr*) realloc(a, b)
