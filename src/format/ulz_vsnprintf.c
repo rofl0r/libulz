@@ -1,5 +1,4 @@
 #include <stdarg.h>
-#include "../../include/vario.h"
 #include "../../include/strlib.h"
 #include "../../include/format.h"
 
