@@ -65,7 +65,7 @@ int isnumericipv4(const char* ipstring);
 #define strlitlen(A) (sizeof(A) - 1)
 
 extern const char conv_cypher[];
-extern const size_t conv_cyper_len;
+extern const size_t conv_cypher_len;
 extern const char base64_tbl[64];
 
 /* calculates number of bytes base64-encoded stream of N bytes will take. */

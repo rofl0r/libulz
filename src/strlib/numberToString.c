@@ -16,7 +16,7 @@ char* numberToString(uint64_t number, unsigned base, char* buffer, size_t maxlen
 	size_t tmp, len = 0, i;
 	int shr = 0;
 	
-	if(base % 2 || base > conv_cyper_len) return NULL;
+	if(base % 2 || base > conv_cypher_len) return NULL;
 	
 	int hasSign = (flags & NTS_SIGNED_TYPE) && number >> 63 == 1;
 	if(hasSign) number = ~number + 1;

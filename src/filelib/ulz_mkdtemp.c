@@ -13,7 +13,7 @@ char* ulz_mkdtemp(char* templ) {
 		return NULL;
 	}
 	loop:
-	for(i = l - 6; i < l; i++) templ[i] = conv_cypher[rand() % conv_cyper_len];
+	for(i = l - 6; i < l; i++) templ[i] = conv_cypher[rand() % conv_cypher_len];
 	if(mkdir(templ, S_IRWXU) == -1) {
 		if(errno == EEXIST) goto loop;
 		return NULL;
