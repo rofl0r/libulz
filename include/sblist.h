@@ -45,6 +45,10 @@ void sblist_init(sblist* l, size_t itemsize, size_t blockitems);
 // free internal buffers of the list
 void sblist_free_items(sblist* l);
 
+/* in case your list contains pointers, not values, this will
+   iterate over all list entries and free them */
+void sblist_free_values(sblist *l);
+
 // accessors
 void* sblist_get(sblist* l, size_t item);
 
