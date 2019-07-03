@@ -31,16 +31,23 @@ typedef struct {
 #define sblist_get_count(X) ((X)->count)
 #define sblist_empty(X) ((X)->count == 0)
 
-// for dynamic style
+/* --- for dynamic style --- */
+
+// allocate and initialize a new sblist
 sblist* sblist_new(size_t itemsize, size_t blockitems);
+
+// free dynamically allocated list and its internal buffers
 void sblist_free(sblist* l);
 
-//for static style
+/* --- for static style --- */
+// initialize existing sblist in user-allocated storage (e.g. stack-allocated)
 void sblist_init(sblist* l, size_t itemsize, size_t blockitems);
+// free internal buffers of the list
 void sblist_free_items(sblist* l);
 
 // accessors
 void* sblist_get(sblist* l, size_t item);
+
 // returns 1 on success, 0 on OOM
 int sblist_add(sblist* l, void* item);
 int sblist_set(sblist* l, void* item, size_t pos);
@@ -48,6 +55,7 @@ void sblist_delete(sblist* l, size_t item);
 char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
+
 /* same as sblist_add, but returns list index of new item, or -1 */
 size_t sblist_addi(sblist* l, void* item);
 void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
