@@ -79,8 +79,13 @@ typedef tglist(proto, void*) tglist_proto;
 /* in case your list contains pointers to heap-allocated mem,
    not values, this will iterate over all list entries and
    free them */
-#define tglist_free_values(X) while((X)->count > 0) \
-	{free((X)->items[--((X)->count)]);}
+/* the casts here serve to suppress warnings when the macro
+   is expanded on a non-pointer list, (but using it would be
+   bogus anyway) */
+#define tglist_free_values(X) \
+	if(tglist_itemsize(X) == sizeof(void*)) while((X)->count > 0) \
+	{free(*(void**)(((char*)(X)->items)+ ( (--((X)->count)) *tglist_itemsize(X) ) ) \
+	);}else{}
 
 // accessors
 #define tglist_get(L, ITEM) ((L)->items[ITEM])
