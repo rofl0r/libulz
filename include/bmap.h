@@ -109,8 +109,8 @@ static inline void* bmap_new(bmap_compare_func fn) {
    this is faster and can be used when it's impossible that duplicate
    items are added */
 #define bmap_insert_nocheck(X, KEY, VAL) ( \
-	( ((X)->tmp.kt = (void*)&(KEY)) || 1 ) && ( \
-	(  (X)->tmp.ss = tglist_insert_sorted(&(X)->keys, (X)->tmp.kt, (X)->compare) ) \
+	(  \
+	(  (X)->tmp.ss = tglist_insert_sorted(&(X)->keys, KEY, (X)->compare) ) \
 		== (ssize_t) -1) ? (ssize_t) -1 : ( \
 			tglist_insert(&(X)->values, VAL, (X)->tmp.ss) ? (X)->tmp.ss : \
 			(  tglist_delete(&(X)->keys, (X)->tmp.ss), (ssize_t) -1  ) \

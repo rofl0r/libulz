@@ -23,9 +23,6 @@ extern "C" {
  * compile to about 400 byte total on x86_64.
  *
  * right now, this is in the testing stage.
- * the insert macro evaluates the pos parameter
- * twice, this will cause issues when used with
- * something like foo++.
  * functions/macros ending in _impl are not supposed
  * to be used by the user.
  *
@@ -51,6 +48,10 @@ extern "C" {
 		size_t count; \
 		size_t capa; \
 		TYPE* items; \
+		union tglist_ ## ID ## _tmp { \
+			TYPE* vt; \
+			size_t s; \
+		} tmp; \
 	}
 
 /* since the memory layout of all tglists is identical, we
@@ -114,12 +115,13 @@ typedef tglist(proto, void*) tglist_proto;
 	tglist_memmove_impl(X, POS, +1, tglist_itemsize(X)) &&  \
 	( --((X)->count) || 1 )
 
-/* int : 0=err, 1=success. attention: POS is evaluated twice! */
+/* int : 0=err, 1=success. */
 #define tglist_insert(X, ITEM, POS) ( \
+	(((X)->tmp.s = (POS)), 1) && \
 	tglist_grow_if_needed( X, tglist_itemsize(X) ) ? \
-	tglist_memmove_impl(X, (POS)+1, -1, tglist_itemsize(X)) && \
+	tglist_memmove_impl(X, ((X)->tmp.s)+1, -1, tglist_itemsize(X)) && \
 		++((X)->count) && \
-		tglist_set(X, ITEM, POS) \
+		tglist_set(X, ITEM, (X)->tmp.s) \
 	: 0 )
 
 /* internal */
@@ -139,11 +141,10 @@ typedef tglist(proto, void*) tglist_proto;
 	qsort((X)->items, (X)->count, tglist_itemsize(X), COMPAREFUNC)
 
 /* insert element into presorted list, returns listindex of new entry or -1
-   due to way sorting works, we need a pointer to the item here, instead of
-   the item itself.
 */
-#define tglist_insert_sorted(X, ITEMPTR, COMPAREFUNC) \
-	tglist_insert_sorted_impl(X, ITEMPTR, tglist_itemsize(X), COMPAREFUNC)
+#define tglist_insert_sorted(X, ITEM, COMPAREFUNC) (\
+	((X)->tmp.vt = (void*)&(ITEM)), \
+	tglist_insert_sorted_impl(X, (X)->tmp.vt, tglist_itemsize(X), COMPAREFUNC))
 
 #ifndef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))

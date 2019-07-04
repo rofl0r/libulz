@@ -42,7 +42,7 @@ int strtest() {
 	tglist_sort(l, mystrstrcmp);
 	for(i = 0; org[i]; i++) {
 		const char* tmp = strdup(org[i]);
-		tglist_insert_sorted(l, &tmp, mystrstrcmp);
+		tglist_insert_sorted(l, tmp, mystrstrcmp);
 	}
 	assert(!strncmp("Duis", tglist_get(l, 0), 4));
 	assert(!strncmp("Duis", tglist_get(l, 1), 4));
@@ -102,7 +102,7 @@ int main() {
 	assert(tglist_get(l, 16000) == 16000);
 
 	i = 3;
-	assert(tglist_insert_sorted(l, &i, intcmp));
+	assert(tglist_insert_sorted(l, i, intcmp));
 	assert(tglist_get(l, 3) == 3);
 	assert(tglist_get(l, 4) == 3);
 
