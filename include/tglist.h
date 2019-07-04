@@ -8,7 +8,6 @@ extern "C" {
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#include "macros.h"
 
 /*
  * type generic list (dynamic array).
@@ -140,6 +139,10 @@ typedef tglist(proto, void*) tglist_proto;
 */
 #define tglist_insert_sorted(X, ITEMPTR, COMPAREFUNC) \
 	tglist_insert_sorted_impl(X, ITEMPTR, tglist_itemsize(X), COMPAREFUNC)
+
+#ifndef MAX
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#endif
 
 static int tglist_grow_if_needed(void* lst, size_t itemsize) {
 	tglist_proto *l = lst;
