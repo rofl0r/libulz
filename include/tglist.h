@@ -105,9 +105,9 @@ typedef tglist(proto, void*) tglist_proto;
 	( (char*) ((L)->items) + (POS * ITEMSZ) )
 
 /* void */
-#define tglist_delete(X, POS) do {\
-	tglist_memmove_impl(X, POS, +1, tglist_itemsize(X)); \
-	--((X)->count); } while(0)
+#define tglist_delete(X, POS) \
+	tglist_memmove_impl(X, POS, +1, tglist_itemsize(X)) &&  \
+	( --((X)->count) || 1 )
 
 /* int : 0=err, 1=success. attention: POS is evaluated twice! */
 #define tglist_insert(X, ITEM, POS) ( \
