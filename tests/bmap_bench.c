@@ -7,7 +7,8 @@
 #define N_LOOPS 20
 
 static int strstrcmp(const void *a, const void *b) {
-	char **x = a, **y = b;
+	const char * const *x = a;
+	const char * const *y = b;
 	return strcmp(*x, *y);
 }
 
@@ -65,20 +66,26 @@ int test_khash() {
 #include "../include/bmap.h"
 
 int test_bmap() {
-	bmap b_b, *b = &b_b;
-	bmap_init(b, sizeof(char*), sizeof(int), strstrcmp);
+	bmap(_, char*, int) b_b, *b = &b_b;
+	bmap_init(b, strstrcmp);
 
 	char buf[64];
 	int i;
 	for(i=0; i<N_ITEMS; i++) {
 		sprintf(buf, "%d", i);
 		const char *key = strdup(buf);
-		bmap_insert_nocheck(b, &key, &i);
+		bmap_insert_nocheck(b, key, i);
 	}
+
+	// check that bmap_insert works, too */
+	i = 0; sprintf(buf, "0");
+	const char *key = strdup(buf);
+	assert(bmap_insert(b,  key, i) == 0);
+
 	for(i=0; i<N_ITEMS; i++) {
 		sprintf(buf, "%d", i);
 		const char *key = buf;
-		assert(bmap_contains(b, &key));
+		assert(bmap_contains(b, key));
 	}
 
 	srand(0);
@@ -87,34 +94,37 @@ int test_bmap() {
 		int val = rand()%N_ITEMS;
 		sprintf(buf, "%d", val);
 		const char *key = buf;
-		res += *(int*)bmap_get(b, &key);
+		res += *bmap_get(b, key);
 	}
+
+	bmap_fini(b, 1);
 	return res;
 }
 
 
 static int intcmp(const void *a, const void *b) {
-	int *x = a, *y = b;
+	int const *x = a;
+	int const *y = b;
 	return *x - *y;
 }
 
 int test_bmap_int() {
-	bmap b_b, *b = &b_b;
-	bmap_init(b, sizeof(int), sizeof(int), intcmp);
+	bmap(_, int, int) b_b, *b = &b_b;
+	bmap_init(b, intcmp);
 
 	int i;
 	for(i=0; i<N_ITEMS; i++) {
-		bmap_insert(b, &i, &i);
+		bmap_insert(b, i, i);
 	}
 	for(i=0; i<N_ITEMS; i++) {
-		assert(bmap_contains(b, &i));
+		assert(bmap_contains(b, i));
 	}
 
 	srand(0);
 	int res = 0;
 	for(i=0; i<N_SEEKS; i++) {
 		int val = rand()%N_ITEMS;
-		res += *(int*)bmap_get(b, &val);
+		res += *bmap_get(b, val);
 	}
 	return res;
 }

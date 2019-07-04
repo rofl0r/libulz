@@ -12,7 +12,7 @@
    there could be multiple as well. so it shouldn't be much faster,
    while having a lot more overhead in code and RAM.
 
-   since we use our per-value sblist behind the scenes, which looks
+   since we use our per-value tglist behind the scenes, which looks
    basically like a flat array of the stored items, there's almost
    zero memory overhead with our method here.
 
@@ -36,28 +36,41 @@
 
 */
 
-#include "sblist.h"
+#include "tglist.h"
+#include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h> /* ssize_t */
 
 typedef int (*bmap_compare_func)(const void *, const void *);
 
-typedef struct bmap {
-	sblist keys;
-	sblist values;
-	bmap_compare_func compare;
-} bmap;
+#define bmap(ID, KEYTYPE, VALTYPE) \
+struct bmap_ ## ID { \
+	tglist(ID ## _keys, KEYTYPE) keys; \
+	tglist(ID ## _vals, VALTYPE) values; \
+	bmap_compare_func compare; \
+	union { \
+		KEYTYPE* kt; \
+		VALTYPE* vt; \
+		ssize_t ss; \
+	} tmp; \
+}
+
+typedef bmap(proto, void*, void*) bmap_proto;
 
 /* initialization */
 /* bmap_compare_func is a typical compare function used for qsort, etc such as strcmp
-   flags ... */
-void bmap_init(bmap* b, size_t keysize, size_t valsize, bmap_compare_func);
-static inline bmap* bmap_new(size_t keysize, size_t valsize, bmap_compare_func fn, int flags) {
-	bmap *nyu = malloc(sizeof(bmap));
-	if(nyu) bmap_init(nyu, keysize, valsize, fn);
+ */
+#define bmap_init(X, COMPAREFUNC) do{\
+	memset(X, 0, sizeof(*(X))); \
+	(X)->compare = COMPAREFUNC; } while(0)
+
+static inline void* bmap_new(bmap_compare_func fn) {
+	bmap_proto *nyu = malloc(sizeof(bmap_proto));
+	if(nyu) bmap_init(nyu, fn);
 	return nyu;
 }
+
 /* destruction */
 /* freeflags:
   0: free only internal mem
@@ -65,34 +78,59 @@ static inline bmap* bmap_new(size_t keysize, size_t valsize, bmap_compare_func f
   2: 0+free all values,
   3: 0+free both
 */
-void bmap_fini(bmap *b, int freeflags);
-
-/* return index of new item, or -1. overwrites existing items. */
-ssize_t bmap_insert(bmap *b, const void *key, const void *value);
-/* same as above, but inserts blindly without checking for existing items.
-   this is 2x faster and can be used when it's impossible that duplicate
-   items are added */
-ssize_t bmap_insert_nocheck(bmap *b, const void *key, const void *value);
+#define bmap_fini(X, FREEFLAGS) do { \
+	if(FREEFLAGS & 1) tglist_free_values(&(X)->keys); \
+	if(FREEFLAGS & 2) tglist_free_values(&(X)->values); \
+	tglist_free_items(&(X)->keys); \
+	tglist_free_items(&(X)->values); \
+} while(0)
 
 /* set value when key index is known. returns int 0 on failure, 1 on succ.*/
-#define bmap_setvalue(B, VAL, POS) sblist_set(&(B)->values, VAL, POS)
+#define bmap_setvalue(B, VAL, POS) tglist_set(&(B)->values, VAL, POS)
 
-#define bmap_getsize(B) sblist_getsize(&(B)->keys)
-#define bmap_getkey(B, X) sblist_get(&(B)->keys, X)
-#define bmap_getval(B, X) sblist_get(&(B)->values, X)
-#define bmap_getkeysize(B) ((B)->keys.itemsize)
-#define bmap_getvalsize(B) ((B)->keys.itemsize)
+#define bmap_getsize(B) tglist_getsize(&(B)->keys)
+#define bmap_getkey(B, X) tglist_get(&(B)->keys, X)
+#define bmap_getval(B, X) tglist_get(&(B)->values, X)
+#define bmap_getkeysize(B) (tglist_itemsize(&(B)->keys))
+#define bmap_getvalsize(B) (tglist_itemsize(&(B)->values))
 
-ssize_t bmap_find(bmap* b, const void* key);
+#define bmap_find(X, KEY) \
+	( (X)->tmp.kt = (void*)&(KEY), bmap_find_impl(X, (X)->tmp.kt, bmap_getkeysize(X)) )
 
 #define bmap_contains(B, KEY) (bmap_find(B, KEY) != (ssize_t)-1)
 
-static inline void* bmap_get(bmap* b, void *key) {
-	ssize_t idx = bmap_find(b, key);
-	if(idx == (ssize_t) -1) return 0;
-	return bmap_getval(b, idx);
-}
+/* unlike bmap_getkey/val with index, this returns a pointer-to-item, or NULL */
+#define bmap_get(X, KEY) \
+	( (((X)->tmp.kt = (void*)&(KEY)), 1) &&  \
+	( (X)->tmp.ss = bmap_find_impl(X, (X)->tmp.kt, bmap_getkeysize(X)) ) == (ssize_t) -1 ? \
+		0 : &bmap_getval(X, (X)->tmp.ss) )
 
-#pragma RcB2 DEP "../src/bmap/bmap.c"
+/* same as bmap_insert, but inserts blindly without checking for existing items.
+   this is faster and can be used when it's impossible that duplicate
+   items are added */
+#define bmap_insert_nocheck(X, KEY, VAL) ( \
+	( ((X)->tmp.kt = (void*)&(KEY)) || 1 ) && ( \
+	(  (X)->tmp.ss = tglist_insert_sorted(&(X)->keys, (X)->tmp.kt, (X)->compare) ) \
+		== (ssize_t) -1) ? (ssize_t) -1 : ( \
+			tglist_insert(&(X)->values, VAL, (X)->tmp.ss) ? (X)->tmp.ss : \
+			(  tglist_delete(&(X)->keys, (X)->tmp.ss), (ssize_t) -1  ) \
+		) \
+	)
+/* insert item into mapping, overwriting existing items with the same key */
+/* return index of new item, or -1. overwrites existing items. */
+// FIXME evaluates KEY twice
+#define bmap_insert(X, KEY, VAL) ( \
+		( (X)->tmp.ss = bmap_find(X, KEY) ) \
+		== (ssize_t) -1 ? bmap_insert_nocheck(X, KEY, VAL) : \
+		tglist_set(&(X)->values, VAL, (X)->tmp.ss), (X)->tmp.ss \
+	)
+
+
+static ssize_t bmap_find_impl(void* bm, const void* key, size_t keysize) {
+	bmap_proto *b = bm;
+	void *r = bsearch(key, b->keys.items, bmap_getsize(b), keysize, b->compare);
+	if(!r) return -1;
+	return ((uintptr_t) r - (uintptr_t) b->keys.items)/keysize;
+}
 
 #endif
