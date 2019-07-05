@@ -125,6 +125,11 @@ static inline void* bmap_new(bmap_compare_func fn) {
 		tglist_set(&(X)->values, VAL, (X)->tmp.ss), (X)->tmp.ss \
 	)
 
+#define bmap_delete(X, POS) ( \
+	(X)->tmp.ss = POS, \
+	tglist_delete(&(X)->keys, POS), \
+	tglist_delete(&(X)->values, POS) \
+	)
 
 static ssize_t bmap_find_impl(void* bm, const void* key, size_t keysize) {
 	bmap_proto *b = bm;
