@@ -43,21 +43,19 @@ extern "C" {
  * use void* at times.
  */
 
-#define tglist(ID, TYPE) \
-	struct tglist_ ## ID { \
+#define tglist_impl(NAME, TYPE) \
+	struct NAME { \
 		size_t count; \
 		size_t capa; \
 		TYPE* items; \
-		union tglist_ ## ID ## _tmp { \
+		union { \
 			TYPE* vt; \
 			size_t s; \
 		} tmp; \
 	}
 
-/* since the memory layout of all tglists is identical, we
-   "intantiate" a prototype for accessing the members in
-   void*-generic static functions. */
-typedef tglist(proto, void*) tglist_proto;
+#define tglist(ID, TYPE) tglist_impl(tglist_ ## ID, TYPE)
+#define tglist_proto tglist_impl(, void*)
 
 #define tglist_getsize(X) ((X)->count)
 #define tglist_get_count(X) ((X)->count)
