@@ -89,7 +89,7 @@ typedef tglist(proto, void*) tglist_proto;
 	);}else{}
 
 // accessors
-#define tglist_get(L, ITEM) ((L)->items[ITEM])
+#define tglist_get(L, POS) ((L)->items[POS])
 
 #define tglist_set(X, ITEM, POS) \
 	((X)->items[POS] = ITEM, 1)
