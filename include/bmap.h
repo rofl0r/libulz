@@ -44,10 +44,10 @@
 
 typedef int (*bmap_compare_func)(const void *, const void *);
 
-#define bmap(ID, KEYTYPE, VALTYPE) \
-struct bmap_ ## ID { \
-	tglist(ID ## _keys, KEYTYPE) keys; \
-	tglist(ID ## _vals, VALTYPE) values; \
+#define bmap_impl(NAME, KEYTYPE, VALTYPE) \
+struct NAME { \
+	tglist_impl(, KEYTYPE) keys; \
+	tglist_impl(, VALTYPE) values; \
 	bmap_compare_func compare; \
 	union { \
 		KEYTYPE* kt; \
@@ -56,7 +56,8 @@ struct bmap_ ## ID { \
 	} tmp; \
 }
 
-typedef bmap(proto, void*, void*) bmap_proto;
+#define bmap(ID, KEYTYPE, VALTYPE) bmap_impl(bmap_ ## ID, KEYTYPE, VALTYPE)
+#define bmap_proto bmap_impl(, void*, void*)
 
 /* initialization */
 /* bmap_compare_func is a typical compare function used for qsort, etc such as strcmp
