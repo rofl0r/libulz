@@ -42,12 +42,25 @@
 #include <stdlib.h>
 #include <unistd.h> /* ssize_t */
 
+#define bmap_cat(a, b) bmap_cat_impl(a, b)
+#define bmap_cat_impl(a, b) a ## b
+
+#ifdef BMAP_USE_TGILIST
+#include "tgilist.h"
+#define VAL_LIST_TYPE tgilist
+#define VAL_LIST_ARGCALL(FN, A, B, C) FN(A, B, C)
+#else
+#define VAL_LIST_TYPE tglist
+#define VAL_LIST_ARGCALL(FN, A, B, C) FN(A, B)
+#endif
+
+
 typedef int (*bmap_compare_func)(const void *, const void *);
 
 #define bmap_impl(NAME, KEYTYPE, VALTYPE) \
 struct NAME { \
 	tglist_impl(, KEYTYPE) keys; \
-	tglist_impl(, VALTYPE) values; \
+	VAL_LIST_ARGCALL(bmap_cat(VAL_LIST_TYPE, _impl), ,VALTYPE, unsigned) values; \
 	bmap_compare_func compare; \
 	union { \
 		KEYTYPE* kt; \
@@ -81,19 +94,19 @@ static inline void* bmap_new(bmap_compare_func fn) {
 */
 #define bmap_fini(X, FREEFLAGS) do { \
 	if(FREEFLAGS & 1) tglist_free_values(&(X)->keys); \
-	if(FREEFLAGS & 2) tglist_free_values(&(X)->values); \
+	if(FREEFLAGS & 2) bmap_cat(VAL_LIST_TYPE, _free_values)(&(X)->values); \
 	tglist_free_items(&(X)->keys); \
-	tglist_free_items(&(X)->values); \
+	bmap_cat(VAL_LIST_TYPE, _free_items)(&(X)->values); \
 } while(0)
 
 /* set value when key index is known. returns int 0 on failure, 1 on succ.*/
-#define bmap_setvalue(B, VAL, POS) tglist_set(&(B)->values, VAL, POS)
+#define bmap_setvalue(B, VAL, POS) bmap_cat(VAL_LIST_TYPE, _set)(&(B)->values, VAL, POS)
 
 #define bmap_getsize(B) tglist_getsize(&(B)->keys)
 #define bmap_getkey(B, X) tglist_get(&(B)->keys, X)
-#define bmap_getval(B, X) tglist_get(&(B)->values, X)
+#define bmap_getval(B, X) bmap_cat(VAL_LIST_TYPE, _get)(&(B)->values, X)
 #define bmap_getkeysize(B) (tglist_itemsize(&(B)->keys))
-#define bmap_getvalsize(B) (tglist_itemsize(&(B)->values))
+#define bmap_getvalsize(B) (bmap_cat(VAL_LIST_TYPE, _itemsize)(&(B)->values))
 
 #define bmap_find(X, KEY) \
 	( (X)->tmp.kt = (void*)&(KEY), bmap_find_impl(X, (X)->tmp.kt, bmap_getkeysize(X)) )
@@ -113,7 +126,7 @@ static inline void* bmap_new(bmap_compare_func fn) {
 	(  \
 	(  (X)->tmp.ss = tglist_insert_sorted(&(X)->keys, KEY, (X)->compare) ) \
 		== (ssize_t) -1) ? (ssize_t) -1 : ( \
-			tglist_insert(&(X)->values, VAL, (X)->tmp.ss) ? (X)->tmp.ss : \
+			bmap_cat(VAL_LIST_TYPE, _insert)(&(X)->values, VAL, (X)->tmp.ss) ? (X)->tmp.ss : \
 			(  tglist_delete(&(X)->keys, (X)->tmp.ss), (ssize_t) -1  ) \
 		) \
 	)
@@ -123,13 +136,13 @@ static inline void* bmap_new(bmap_compare_func fn) {
 #define bmap_insert(X, KEY, VAL) ( \
 		( (X)->tmp.ss = bmap_find(X, KEY) ) \
 		== (ssize_t) -1 ? bmap_insert_nocheck(X, KEY, VAL) : \
-		tglist_set(&(X)->values, VAL, (X)->tmp.ss), (X)->tmp.ss \
+		bmap_cat(VAL_LIST_TYPE, _set)(&(X)->values, VAL, (X)->tmp.ss), (X)->tmp.ss \
 	)
 
 #define bmap_delete(X, POS) ( \
 	(X)->tmp.ss = POS, \
 	tglist_delete(&(X)->keys, POS), \
-	tglist_delete(&(X)->values, POS) \
+	bmap_cat(VAL_LIST_TYPE, _delete)(&(X)->values, POS) \
 	)
 
 static ssize_t bmap_find_impl(void* bm, const void* key, size_t keysize) {
