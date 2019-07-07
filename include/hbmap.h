@@ -33,7 +33,10 @@ struct NAME { \
 	bmap_impl(, KEYTYPE, VALTYPE) buckets[NUMBUCKETS]; \
 }
 
-#define hbmap(ID, KEYTYPE, VALTYPE, NUMBUCKETS) \
+#define hbmap(KEYTYPE, VALTYPE, NUMBUCKETS) \
+	hbmap_impl(, KEYTYPE, VALTYPE, NUMBUCKETS)
+
+#define hbmap_decl(ID, KEYTYPE, VALTYPE, NUMBUCKETS) \
 	hbmap_impl(hbmap_ ## ID, KEYTYPE, VALTYPE, NUMBUCKETS)
 
 #define hbmap_proto(NUMBUCKETS) \

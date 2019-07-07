@@ -75,7 +75,7 @@ static inline unsigned __ac_X31_hash_string(const char *s)
 
 
 int test_bmap() {
-	hbmap(_, char*, int, 256) b_b, *b = &b_b;
+	hbmap(char*, int, 256) b_b, *b = &b_b;
 	hbmap_init(b, strstrcmp, __ac_X31_hash_string);
 
 	char buf[64];
@@ -120,7 +120,7 @@ static int intcmp(const void *a, const void *b) {
 static inline unsigned int_hash(int x) { return x; }
 
 int test_bmap_int() {
-	hbmap(_, int, int, 256) b_b, *b = &b_b;
+	hbmap(int, int, 256) b_b, *b = &b_b;
 	hbmap_init(b, intcmp, int_hash);
 
 	int i;
