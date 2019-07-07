@@ -66,7 +66,7 @@ int test_khash() {
 #include "../include/bmap.h"
 
 int test_bmap() {
-	bmap(_, char*, int) b_b, *b = &b_b;
+	bmap(char*, int) b_b, *b = &b_b;
 	bmap_init(b, strstrcmp);
 
 	char buf[64];
@@ -109,7 +109,7 @@ static int intcmp(const void *a, const void *b) {
 }
 
 int test_bmap_int() {
-	bmap(_, int, int) b_b, *b = &b_b;
+	bmap(int, int) b_b, *b = &b_b;
 	bmap_init(b, intcmp);
 
 	int i;

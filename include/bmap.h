@@ -69,7 +69,8 @@ struct NAME { \
 	} tmp; \
 }
 
-#define bmap(ID, KEYTYPE, VALTYPE) bmap_impl(bmap_ ## ID, KEYTYPE, VALTYPE)
+#define bmap(KEYTYPE, VALTYPE) bmap_impl(, KEYTYPE, VALTYPE)
+#define bmap_decl(ID, KEYTYPE, VALTYPE) bmap_impl(bmap_ ## ID, KEYTYPE, VALTYPE)
 #define bmap_proto bmap_impl(, void*, void*)
 
 /* initialization */
