@@ -67,9 +67,38 @@ static inline void* hbmap_new(bmap_compare_func fn, void* hash_func, size_t numb
 		{ bmap_fini(&(X)->buckets[i], FREEFLAGS); } \
 } while(0)
 
+#define hbmap_getbucketcount(X) ARRAY_SIZE((X)->buckets)
+
+/* internal stuff needed for iterator impl */
+
 #define hbmap_iter_bucket(I) ( (I) >> 32)
 #define hbmap_iter_index(I)  ( (I) & 0xffffffff )
 #define hbmap_iter_makebucket(I) ( (I) << 32)
+
+#define hbmap_iter_bucket_valid(X, ITER) ( \
+	hbmap_iter_bucket(ITER) < hbmap_getbucketcount(X) )
+#define hbmap_iter_index_valid(X, ITER) ( \
+	hbmap_iter_index(ITER) < bmap_getsize(&(X)->buckets[hbmap_iter_bucket(ITER)]) )
+#define hbmap_iter_valid(X, ITER) \
+	(hbmap_iter_bucket_valid(X, ITER) && hbmap_iter_index_valid(X, ITER))
+
+#define hbmap_next_step(X, ITER) ( \
+	hbmap_iter_index_valid(X, (ITER)+1) ? (ITER)+1 : \
+	hbmap_iter_makebucket(hbmap_iter_bucket(ITER)+1) \
+	)
+
+static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbucks) {
+	hbmap_proto(nbucks) *h = map;
+	do iter = hbmap_next_step(h, iter);
+	while(hbmap_iter_bucket_valid(h, iter) && !hbmap_iter_index_valid(h, iter));
+	return iter;
+}
+
+/* public API continues */
+
+#define hbmap_foreach(X, ITER_VAR) \
+	for(ITER_VAR = 0; hbmap_iter_bucket_valid(X, ITER_VAR); \
+		ITER_VAR = hbmap_next_valid_impl(X, ITER_VAR, hbmap_getbucketcount(X)))
 
 #define hbmap_getkey(X, ITER) \
 	bmap_getkey(&(X)->buckets[hbmap_iter_bucket(ITER)], hbmap_iter_index(ITER))
@@ -82,7 +111,6 @@ static inline void* hbmap_new(bmap_compare_func fn, void* hash_func, size_t numb
 
 #define hbmap_getkeysize(X) (bmap_getkeysize(&(X)->buckets[0]))
 #define hbmap_getvalsize(X) (bmap_getvalsize(&(X)->buckets[0]))
-#define hbmap_getbucketcount(X) ARRAY_SIZE((X)->buckets)
 
 #define hbmap_buckindex(X, KEY) \
 	( (X)->hash_func(KEY) % hbmap_getbucketcount(X) )
