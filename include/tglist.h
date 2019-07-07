@@ -152,7 +152,7 @@ static int tglist_grow_if_needed(void* lst, size_t itemsize) {
 	tglist_proto *l = lst;
 	void* temp;
 	if(l->count == l->capa) {
-		size_t newsz = l->capa == 0 ? MAX(4096/itemsize, 64) : l->capa*2;
+		size_t newsz = l->capa == 0 ? 4 : l->capa*2;
 		temp = realloc(l->items, newsz * itemsize);
 		if(!temp) return 0;
 		l->capa = newsz;
