@@ -33,7 +33,8 @@ extern "C" {
 		tglist_impl(, TYPE) items; \
 	}
 
-#define tgilist(ID, TYPE, IDX_TYPE) tgilist_impl(tgilist_ ## ID, TYPE, IDX_TYPE)
+#define tgilist_decl(ID, TYPE, IDX_TYPE) tgilist_impl(tgilist_ ## ID, TYPE, IDX_TYPE)
+#define tgilist(TYPE, IDX_TYPE) tgilist_impl(, TYPE, IDX_TYPE)
 #define tgilist_proto tgilist_impl(, void*, size_t)
 
 #define tgilist_getsize(X) tglist_getsize(&(X)->index)
