@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int main() {
-	tglist(_, unsigned char) *l = tglist_new();
+	tglist(unsigned char) *l = tglist_new();
 	size_t i;
 	unsigned char c;
 	assert(tglist_getsize(l) == 0);

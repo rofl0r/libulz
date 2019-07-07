@@ -54,7 +54,9 @@ extern "C" {
 		} tmp; \
 	}
 
-#define tglist(ID, TYPE) tglist_impl(tglist_ ## ID, TYPE)
+#define tglist(TYPE) tglist_impl(, TYPE)
+/* use tglist_decl if you need a named struct, e.g. to put in a header */
+#define tglist_decl(ID, TYPE) tglist_impl(tglist_ ## ID, TYPE)
 #define tglist_proto tglist_impl(, void*)
 
 #define tglist_getsize(X) ((X)->count)

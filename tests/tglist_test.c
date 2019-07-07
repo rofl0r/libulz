@@ -23,7 +23,7 @@ static inline struct test1* make_struct(int x, int y, void* d) {
 }
 
 static inline void test_single(int max, int blocktimes) {
-	tglist(_, struct test1) l_l, *l = &l_l;
+	tglist(struct test1) l_l, *l = &l_l;
 	int i1 = 0;
 	struct test1* t1;
 	size_t i;

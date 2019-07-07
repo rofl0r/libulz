@@ -14,7 +14,7 @@ static int mystrstrcmp(const void *vp1, const void* vp2) {
 }
 
 int strtest() {
-	tglist(str, char*) l_buf, *l = &l_buf;
+	tglist(char*) l_buf, *l = &l_buf;
 	tglist_init(l);
 	const char* org[] = {
 		"Lorem ipsum dolor sit amet, ",
@@ -60,7 +60,7 @@ int strtest() {
 
 int main() {
 	int i = 0;
-	tglist(_, int) *l = tglist_new();
+	tglist(int) *l = tglist_new();
 
 	assert(tglist_getsize(l) == 0);
 	tglist_add(l, i);
