@@ -120,11 +120,11 @@ static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbuck
 #define hbmap_getkeysize(X) (bmap_getkeysize(&(X)->buckets[0]))
 #define hbmap_getvalsize(X) (bmap_getvalsize(&(X)->buckets[0]))
 
-#define hbmap_buckindex(X, KEY) \
+#define hbmap_buckindex_impl(X, KEY) \
 	( (X)->hash_func(KEY) % hbmap_getbucketcount(X) )
 
 #define hbmap_find(X, KEY) ( \
-	( (X)->tmp.it = hbmap_iter_makebucket(hbmap_buckindex(X, KEY) ) ), \
+	( (X)->tmp.it = hbmap_iter_makebucket(hbmap_buckindex_impl(X, KEY) ) ), \
 	((X)->tmp.it |= (int64_t) bmap_find(&(X)->buckets[ hbmap_iter_bucket((X)->tmp.it) ], KEY)), \
 	(X)->tmp.it)
 
@@ -139,7 +139,7 @@ static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbuck
    this is faster and can be used when it's impossible that duplicate
    items are added */
 #define hbmap_insert_nocheck(X, KEY, VAL) ( \
-	( (X)->tmp.it = hbmap_iter_makebucket(hbmap_buckindex(X, KEY) ) ), \
+	( (X)->tmp.it = hbmap_iter_makebucket(hbmap_buckindex_impl(X, KEY) ) ), \
 	((X)->tmp.it |= (int64_t) bmap_insert_nocheck(&(X)->buckets[hbmap_iter_bucket((X)->tmp.it)], KEY, VAL)), \
 	(X)->tmp.it)
 
