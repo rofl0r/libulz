@@ -96,6 +96,8 @@ extern "C" {
 
 #define tglist_itemsize(X) sizeof( (X)->items[0] )
 
+#define tglist_foreach(X, ITER) for(ITER=0;ITER<tglist_getsize(X);++ITER)
+
 // returns 1 on success, 0 on OOM
 #define tglist_prepare_addition(X) ( \
 		tglist_grow_if_needed( X, tglist_itemsize(X) ) ? \
