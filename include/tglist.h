@@ -9,6 +9,10 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-value"
+#endif
+
 /*
  * type generic list (dynamic array).
  *
@@ -115,7 +119,7 @@ extern "C" {
 /* void */
 #define tglist_delete(X, POS) \
 	tglist_memmove_impl(X, POS, +1, tglist_itemsize(X)) &&  \
-	( --((X)->count) || 1 )
+	( --((X)->count) , 1 )
 
 /* int : 0=err, 1=success. */
 #define tglist_insert(X, ITEM, POS) ( \
