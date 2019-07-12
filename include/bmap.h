@@ -94,8 +94,8 @@ static inline void* bmap_new(bmap_compare_func fn) {
   3: 0+free both
 */
 #define bmap_fini(X, FREEFLAGS) do { \
-	if(FREEFLAGS & 1) tglist_free_values(&(X)->keys); \
-	if(FREEFLAGS & 2) bmap_cat(VAL_LIST_TYPE, _free_values)(&(X)->values); \
+	if(FREEFLAGS & 1) {tglist_free_values(&(X)->keys);} \
+	if(FREEFLAGS & 2) {bmap_cat(VAL_LIST_TYPE, _free_values)(&(X)->values);} \
 	tglist_free_items(&(X)->keys); \
 	bmap_cat(VAL_LIST_TYPE, _free_items)(&(X)->values); \
 } while(0)
