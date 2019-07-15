@@ -104,8 +104,8 @@ static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbuck
    hbmap_foreach(map, i) { while(hbmap_iter_index_valid(map, i)) hbmap_delete(map, i); }
 */
 #define hbmap_foreach(X, ITER_VAR) \
-	for(ITER_VAR = hbmap_iter_bucket_valid(X, (hbmap_iter)0) ? 0 : hbmap_next_valid_impl(X, 0, hbmap_getbucketcount(X)); \
-		hbmap_iter_bucket_valid(X, ITER_VAR); \
+	for(ITER_VAR = hbmap_iter_valid(X, (hbmap_iter)0) ? 0 : hbmap_next_valid_impl(X, 0, hbmap_getbucketcount(X)); \
+		hbmap_iter_valid(X, ITER_VAR); \
 		ITER_VAR = hbmap_next_valid_impl(X, ITER_VAR, hbmap_getbucketcount(X)))
 
 #define hbmap_getkey(X, ITER) \
