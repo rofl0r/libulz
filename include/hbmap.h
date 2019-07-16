@@ -42,19 +42,31 @@ struct NAME { \
 #define hbmap_proto(NUMBUCKETS) \
 	hbmap_impl(, void*, void*, NUMBUCKETS)
 
+#define hbmap_getbucketcount(X) ARRAY_SIZE((X)->buckets)
+
+#define hbmap_struct_size_impl(NUMBUCKETS) ( \
+	offsetof(hbmap_proto(1), buckets) + \
+	NUMBUCKETS * sizeof(bmap_proto) \
+	)
+
+#define hbmap_init_impl(X, COMPAREFUNC, HASHFUNC, NUMBUCKETS) do{\
+	memset(X, 0, hbmap_struct_size_impl(NUMBUCKETS)); \
+	((hbmap_proto(1)*)(void*)(X))->hash_func = (void*)HASHFUNC; \
+	bmap_proto *p = (void*)(&((hbmap_proto(1)*)(void*)(X))->buckets[0]); \
+	size_t i; for(i=0; i<NUMBUCKETS; ++i) \
+		p[i].compare = COMPAREFUNC; \
+	} while(0)
+
 /* initialization */
 /* bmap_compare_func is a typical compare function used for qsort, etc such as strcmp
  */
-#define hbmap_init(X, COMPAREFUNC, HASHFUNC) do{\
-	memset(X, 0, sizeof(*(X))); \
-	size_t i; for(i=0; i<ARRAY_SIZE((X)->buckets); ++i) \
-		(X)->buckets[i].compare = COMPAREFUNC; \
-	(X)->hash_func = HASHFUNC; \
-	} while(0)
+
+#define hbmap_init(X, COMPAREFUNC, HASHFUNC) \
+	hbmap_init_impl(X, COMPAREFUNC, HASHFUNC, hbmap_getbucketcount(X))
 
 static inline void* hbmap_new(bmap_compare_func fn, void* hash_func, size_t numbuckets) {
-	hbmap_proto(numbuckets) *nyu = malloc(sizeof(hbmap_proto(numbuckets)));
-	if(nyu) hbmap_init(nyu, fn, hash_func);
+	void *nyu = malloc(hbmap_struct_size_impl(numbuckets));
+	if(nyu) hbmap_init_impl(nyu, fn, hash_func, numbuckets);
 	return nyu;
 }
 
@@ -66,11 +78,9 @@ static inline void* hbmap_new(bmap_compare_func fn, void* hash_func, size_t numb
   3: 0+free both
 */
 #define hbmap_fini(X, FREEFLAGS) do { \
-	size_t i; for(i=0; i<ARRAY_SIZE((X)->buckets); ++i) \
+	size_t i; for(i=0; i < hbmap_getbucketcount(X); ++i) \
 		{ bmap_fini(&(X)->buckets[i], FREEFLAGS); } \
 } while(0)
-
-#define hbmap_getbucketcount(X) ARRAY_SIZE((X)->buckets)
 
 /* internal stuff needed for iterator impl */
 
@@ -78,22 +88,27 @@ static inline void* hbmap_new(bmap_compare_func fn, void* hash_func, size_t numb
 #define hbmap_iter_index(I)  ( (I) & 0xffffffff )
 #define hbmap_iter_makebucket(I) ( (I) << 32)
 
-#define hbmap_iter_bucket_valid(X, ITER) ( \
-	hbmap_iter_bucket(ITER) < hbmap_getbucketcount(X) )
+#define hbmap_iter_bucket_valid(X, ITER, NUMBUCKETS) ( \
+	hbmap_iter_bucket(ITER) < NUMBUCKETS )
 #define hbmap_iter_index_valid(X, ITER) ( \
-	hbmap_iter_index(ITER) < bmap_getsize(&(X)->buckets[hbmap_iter_bucket(ITER)]) )
-#define hbmap_iter_valid(X, ITER) \
-	(hbmap_iter_bucket_valid(X, ITER) && hbmap_iter_index_valid(X, ITER))
+	hbmap_iter_index(ITER) < bmap_getsize(& \
+	(((bmap_proto *)( \
+	(void*)(&((hbmap_proto(1)*)(void*)(X))->buckets[0]) \
+	))[hbmap_iter_bucket(ITER)]) \
+	))
+
+#define hbmap_iter_valid(X, ITER) (\
+	hbmap_iter_bucket_valid(X, ITER, hbmap_getbucketcount(X)) && \
+	hbmap_iter_index_valid(X, ITER))
 
 #define hbmap_next_step(X, ITER) ( \
 	hbmap_iter_index_valid(X, (ITER)+1) ? (ITER)+1 : \
 	hbmap_iter_makebucket(hbmap_iter_bucket(ITER)+1) \
 	)
 
-static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbucks) {
-	hbmap_proto(nbucks) *h = map;
+static hbmap_iter hbmap_next_valid_impl(void *h, hbmap_iter iter, size_t nbucks) {
 	do iter = hbmap_next_step(h, iter);
-	while(hbmap_iter_bucket_valid(h, iter) && !hbmap_iter_index_valid(h, iter));
+	while(hbmap_iter_bucket_valid(h, iter, nbucks) && !hbmap_iter_index_valid(h, iter));
 	return iter;
 }
 
@@ -104,7 +119,8 @@ static hbmap_iter hbmap_next_valid_impl(void *map, hbmap_iter iter, size_t nbuck
    hbmap_foreach(map, i) { while(hbmap_iter_index_valid(map, i)) hbmap_delete(map, i); }
 */
 #define hbmap_foreach(X, ITER_VAR) \
-	for(ITER_VAR = hbmap_iter_valid(X, (hbmap_iter)0) ? 0 : hbmap_next_valid_impl(X, 0, hbmap_getbucketcount(X)); \
+	for(ITER_VAR = hbmap_iter_valid(X, (hbmap_iter)0) ? 0 \
+	: hbmap_next_valid_impl(X, 0, hbmap_getbucketcount(X)); \
 		hbmap_iter_valid(X, ITER_VAR); \
 		ITER_VAR = hbmap_next_valid_impl(X, ITER_VAR, hbmap_getbucketcount(X)))
 
