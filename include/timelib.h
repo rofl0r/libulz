@@ -18,6 +18,8 @@ long mspassed(struct timeval* t);
 void gettimestamp(struct timeval* t);
 /* return actual system time in usec granularity */
 long long getutime(void);
+/* get difference between 2 struct timespec in nanoseconds */
+long long timespec_diff(struct timespec *a, struct timespec *b);
 
 #pragma RcB2 DEP "../src/timelib/*.c"
 
