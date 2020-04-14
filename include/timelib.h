@@ -5,8 +5,8 @@
 #define _GNU_SOURCE
 #undef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
-#undef _BSD_SOURCE
-#define _BSD_SOURCE
+#undef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE
 #include <stddef.h>
 #include <time.h>
 #include <sys/time.h>
