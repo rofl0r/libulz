@@ -60,6 +60,10 @@ char* sblist_item_from_index(sblist* l, size_t idx);
 int sblist_grow_if_needed(sblist* l);
 int sblist_insert(sblist* l, void* item, size_t pos);
 
+/* you can use sblist as a stack by using sblist_add()/sblist_pop() */
+/* return last item in list and remove it. returns NULL if no items in list. */
+void* sblist_pop(sblist *l);
+
 /* same as sblist_add, but returns list index of new item, or -1 */
 size_t sblist_addi(sblist* l, void* item);
 void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
