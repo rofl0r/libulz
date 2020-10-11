@@ -33,26 +33,26 @@ typedef struct {
 
 /* --- for dynamic style --- */
 
-// allocate and initialize a new sblist
+/* allocate and initialize a new sblist */
 sblist* sblist_new(size_t itemsize, size_t blockitems);
 
-// free dynamically allocated list and its internal buffers
+/* free dynamically allocated list and its internal buffers */
 void sblist_free(sblist* l);
 
 /* --- for static style --- */
-// initialize existing sblist in user-allocated storage (e.g. stack-allocated)
+/* initialize existing sblist in user-allocated storage (e.g. stack-allocated)*/
 void sblist_init(sblist* l, size_t itemsize, size_t blockitems);
-// free internal buffers of the list
+/* free internal buffers of the list */
 void sblist_free_items(sblist* l);
 
 /* in case your list contains pointers, not values, this will
    iterate over all list entries and free them */
 void sblist_free_values(sblist *l);
 
-// accessors
+/* accessors */
 void* sblist_get(sblist* l, size_t item);
 
-// returns 1 on success, 0 on OOM
+/* returns 1 on success, 0 on OOM */
 int sblist_add(sblist* l, void* item);
 int sblist_set(sblist* l, void* item, size_t pos);
 void sblist_delete(sblist* l, size_t item);
@@ -78,21 +78,21 @@ size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, cons
 #define __sblist_macro_concat( x, y ) __sblist_concat_impl( x, y )
 #define __sblist_iterator_name __sblist_macro_concat(sblist_iterator, __COUNTER__)
 
-// use with custom iterator variable
+/* use with custom iterator variable */
 #define sblist_iter_counter(LIST, ITER, PTR) \
 	for(size_t ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
 
-// use with custom iterator variable, which is predeclared
+/* use with custom iterator variable, which is predeclared */
 #define sblist_iter_counter2(LIST, ITER, PTR) \
 	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < sblist_getsize(LIST); ITER++)
 
-// use with custom iterator variable, which is predeclared and signed
-// useful for a loop which can delete items from the list, and then decrease the iterator var.
+/* use with custom iterator variable, which is predeclared and signed */
+/* useful for a loop which can delete items from the list, and then decrease the iterator var. */
 #define sblist_iter_counter2s(LIST, ITER, PTR) \
 	for(ITER = 0; (PTR = sblist_get(LIST, ITER)), ITER < (ssize_t) sblist_getsize(LIST); ITER++)
 
 
-// uses "magic" iterator variable
+/* uses "magic" iterator variable */
 #define sblist_iter(LIST, PTR) sblist_iter_counter(LIST, __sblist_iterator_name, PTR)
 
 #ifdef __cplusplus
