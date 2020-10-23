@@ -22,6 +22,8 @@ char* op_get(op_state* p, stringptr* arg) {
 			l = strleneq(s);
 			if(l == arg->size && !memcmp(arg->ptr, s, l))
 				return s + l + 1;
+			else if(!l && !strcmp(arg->ptr, s) && i+1 < p->argc)
+				return p->argv[i+1];
 		}
 	}
 	return NULL;
