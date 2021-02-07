@@ -4,79 +4,52 @@
 #include <unistd.h>
 #include "../../include/proclib.h"
 
-extern char** environ;
-
 int process_open(struct process *p, char* const argv[]) {
+	extern char** environ;
+	int pipes[3][2] = {0}, i,j;
 
 	errno = posix_spawn_file_actions_init(&p->fa);
 	if(errno) goto spawn_error;
 
-	errno = posix_spawn_file_actions_addclose(&p->fa, 0);
-	if(errno) goto spawn_error;
+	for(i=0; i<3; ++i) {
+		errno = posix_spawn_file_actions_addclose(&p->fa, i);
+		if(errno) goto spawn_error;
+	}
 
-	errno = posix_spawn_file_actions_addclose(&p->fa, 1);
-	if(errno) goto spawn_error;
+	for(i=0; i<3; ++i) if(pipe(pipes[i])) goto spawn_error;
 
-	errno = posix_spawn_file_actions_addclose(&p->fa, 2);
-	if(errno) return -1;
+	static const unsigned char pipeends[3] = {0,1,1};
 
-	int stdin_pipes[2];
-	int stdout_pipes[2];
-	int stderr_pipes[2];
+	for(i=0; i<3; ++i) p->fds[i] = pipes[i][!pipeends[i]];
 
-	if(pipe(stdin_pipes)) goto spawn_error;
-	if(pipe(stdout_pipes)) goto spawn_error;
-	if(pipe(stderr_pipes)) goto spawn_error;
-
-	p->stdinfd = stdin_pipes[1];
-	p->stdoutfd = stdout_pipes[0];
-	p->stderrfd = stderr_pipes[0];
-
-	errno = posix_spawn_file_actions_adddup2(&p->fa, stdin_pipes[0], 0);
-	if(errno) goto spawn_error;
-
-	errno = posix_spawn_file_actions_adddup2(&p->fa, stdout_pipes[1], 1);
-	if(errno) goto spawn_error;
-
-	errno = posix_spawn_file_actions_adddup2(&p->fa, stderr_pipes[1], 2);
-	if(errno) goto spawn_error;
-
-
-	errno = posix_spawn_file_actions_addclose(&p->fa, stdin_pipes[0]);
-	if(errno) goto spawn_error;
-	errno = posix_spawn_file_actions_addclose(&p->fa, stdin_pipes[1]);
-	if(errno) goto spawn_error;
-
-	errno = posix_spawn_file_actions_addclose(&p->fa, stdout_pipes[0]);
-	if(errno) goto spawn_error;
-	errno = posix_spawn_file_actions_addclose(&p->fa, stdout_pipes[1]);
-	if(errno) goto spawn_error;
-
-	errno = posix_spawn_file_actions_addclose(&p->fa, stderr_pipes[0]);
-	if(errno) goto spawn_error;
-	errno = posix_spawn_file_actions_addclose(&p->fa, stderr_pipes[1]);
-	if(errno) goto spawn_error;
+	for(i=0; i<3; ++i) {
+		errno = posix_spawn_file_actions_adddup2(&p->fa, pipes[i][pipeends[i]], i);
+		if(errno) goto spawn_error;
+	}
+	for(i=0; i<3; ++i) for(j=0; j<2; ++j) {
+		errno = posix_spawn_file_actions_addclose(&p->fa, pipes[i][j]);
+		if(errno) goto spawn_error;
+	}
 
 	errno = posix_spawnp(&p->pid, argv[0], &p->fa, NULL, argv, environ);
 	if(errno) {
 		spawn_error:
+		for(i=0; i<3; ++i) for(j=0; j<2; ++j)
+			if(pipes[i][j]) close(pipes[i][j]);
 		posix_spawn_file_actions_destroy(&p->fa);
 		return -1;
 	}
 
-	close(stdin_pipes[0]);
-	close(stdout_pipes[1]);
-	close(stderr_pipes[1]);
+	for(i=0; i<3; ++i)
+		close(pipes[i][pipeends[i]]);
 
 	return 0;
 }
 
 #include <sys/wait.h>
 int process_close(struct process *p) {
-	close(p->stdinfd);
-	close(p->stdoutfd);
-	close(p->stderrfd);
-	int retval;
+	int i, retval;
+	for(i=0; i<3; ++i) close(p->fds[i]);
 	waitpid(p->pid, &retval, 0);
 	posix_spawn_file_actions_destroy(&p->fa);
 	return WEXITSTATUS(retval);
@@ -84,18 +57,21 @@ int process_close(struct process *p) {
 
 #ifdef TEST
 #include <stdio.h>
+#include <string.h>
+#include <assert.h>
 
 int main() {
 	struct process p;
-	int ret = process_open(&p, (char* const[]){"/bin/node", "sha4stdin.js", 0L});
+	int ret = process_open(&p, (char* const[]){"/usr/bin/awk", "-v", "a=b", "{print a $0;}", 0L});
 	if(ret) {
 		perror("process_open");
 		return 1;
 	}
-	write(p.stdinfd, "foo\n", 4);
-	char buf[165];
-	read(p.stdoutfd, buf, sizeof buf);
+	write(p.fds[0], "foo\n", 4);
+	char buf[128];
+	read(p.fds[1], buf, sizeof buf);
 	puts(buf);
+	assert(!strcmp(buf, "bfoo\n"));
 	int e = process_close(&p);
 	printf("process returned %d status.\n", e);
 }

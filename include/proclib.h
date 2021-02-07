@@ -15,19 +15,20 @@ void daemonize(void);
 
 struct process {
 	pid_t pid;
-	int stdinfd;
-	int stdoutfd;
-	int stderrfd;
+	int fds[3];
 	posix_spawn_file_actions_t fa;
 };
 
 /**
  * run a process.
- * @param p  pointer to process struct. initialize manually with desired fds
- *  before usage.
+ * @param p  pointer to process struct.
+ *  use members fds[0-2] to access stdin, stdout, and stderr of the process,
+ *  after successful start. (via write/read).
  * @param argv  argv parameter to be passed to the executed process.
  *  requires the last element to be a null pointer.
- * @return 0 on success, -1 on error. in error case, you can query errno. */
+ * @return 0 on success, -1 on error.
+ *  in error case, you can query errno, and there's no need to call
+ *  process_close(). */
 int process_open(struct process *p, char* const argv[]);
 
 /**
