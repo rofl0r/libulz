@@ -44,11 +44,21 @@ int isUpper(char* i);
 int isLower(char* i);
 void makelower(char* i);
 void makeupper(char* i);
+
+/* convert int/unsigned to string.
+   these are optimized for small size. */
+char *itoa(int number, char* buffer);
+char *utoa(unsigned number, char* buffer);
+
+/* the following *int* to string conversion routines all use the same
+   backend. if your programs needs more than one type of such conversion
+   you should use them over itoa/utoa to keep binary size minimal. */
 char* numberToString(uint64_t number, unsigned int base, char* buffer, size_t maxlen, int flags);
 char* intToString(int number, char* buffer);
 char* uintToString(unsigned int number, char* buffer);
 char* int64ToString(int64_t number, char* buffer);
 char* uint64ToString(uint64_t number, char* buffer);
+
 int strtoint(char* str, size_t len);
 int64_t strtoint64(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
