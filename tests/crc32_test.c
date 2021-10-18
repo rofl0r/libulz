@@ -21,7 +21,7 @@ int main() {
 	CRC_PREFIX(Final)(val.ch, &ctx);
 	printf("result %08x\n", val.val);
 #ifdef CRC32_CASTAGNOLI
-	assert(val.val == 0xe3d616ff);
+	assert(val.val == 0x7d29d46d);
 #else
 	assert(val.val == 0xDBD96D6E);
 #endif

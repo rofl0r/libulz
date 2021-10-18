@@ -38,7 +38,7 @@ SUCH DAMAGE.
 #ifdef CRC32_CASTAGNOLI
 # define POLYNOMIAL 0x1EDC6F41
 # define T_0_0x80 0x82f63b78 /* Optimization: Precomputed value of T[0][0x80]. */
-# define INIT_CRC T_0_0x80
+# define INIT_CRC 0xffffffff
 # define CRC_PREFIX(FUNC) CRC32C_ ## FUNC
 #else
 # define POLYNOMIAL 0x04C11DB7
