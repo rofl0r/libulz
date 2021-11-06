@@ -7,6 +7,7 @@
 
 #define stringlist sblist
 #define stringlist_new(N) sblist_new(sizeof(char*), N)
+#define stringlist_free(SL) sblist_free(SL)
 #define stringlist_getsize(SL) sblist_getsize(SL)
 static inline char* stringlist_get(stringlist *sl, size_t idx) {
 	char** x = sblist_get(sl, idx);
