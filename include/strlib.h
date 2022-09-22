@@ -64,6 +64,7 @@ int64_t strtoint64(char* str, size_t len);
 char* strdup_n(char* str, size_t len);
 char* strstr_uc(char* haystack, char* needle, size_t needlesize);
 char* strstar(const char* haystack, const char* needle, size_t needlesize);
+int strends(char* what, char* with);
 char* findword(char* buf, char* word_uc, size_t word_len);
 
 int ipv4fromstring(char* ipstring, unsigned char* fourbytesptr);
