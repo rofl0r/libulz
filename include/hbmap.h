@@ -137,7 +137,7 @@ static hbmap_iter hbmap_next_valid_impl(void *h, hbmap_iter iter, size_t nbucks)
 #define hbmap_getvalsize(X) (bmap_getvalsize(&(X)->buckets[0]))
 
 #define hbmap_buckindex_impl(X, KEY) \
-	( (X)->hash_func(KEY) % hbmap_getbucketcount(X) )
+	( (hbmap_iter) (X)->hash_func(KEY) % hbmap_getbucketcount(X) )
 
 #define hbmap_find(X, KEY) ( \
 	( (X)->tmp.it = hbmap_iter_makebucket(hbmap_buckindex_impl(X, KEY) ) ), \
