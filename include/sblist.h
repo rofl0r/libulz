@@ -8,15 +8,17 @@ extern "C" {
 #include <stddef.h>
 /*
  * simple buffer list.
- * 
- * this thing here is basically a generic dynamic array
+ *
+ * this thing here is basically a generic dynamic array (like a C++ vector).
+ * all data is stored in a single contiguous block of memory.
+ *
  * will realloc after every blockitems inserts
  * can store items of any size.
- * 
+ *
  * so think of it as a by-value list, as opposed to a typical by-ref list.
  * you typically use it by having some struct on the stack, and pass a pointer
  * to sblist_add, which will copy the contents into its internal memory.
- * 
+ *
  */
 
 typedef struct {
@@ -33,7 +35,10 @@ typedef struct {
 
 /* --- for dynamic style --- */
 
-/* allocate and initialize a new sblist */
+/* allocate and initialize a new sblist. blockitems denotes how many items
+   to allocate at a time. using bigger values will reduce realloc overhead,
+   at the cost of higher memory usage. if 0 is passed, a new page of 4KB will
+   be requested whenever the list needs to grow. */
 sblist* sblist_new(size_t itemsize, size_t blockitems);
 
 /* free dynamically allocated list and its internal buffers */
@@ -66,7 +71,19 @@ void* sblist_pop(sblist *l);
 
 /* same as sblist_add, but returns list index of new item, or -1 */
 size_t sblist_addi(sblist* l, void* item);
+
+/* uses qsort() to sort list entries - it's probably a better idea to insert
+   them sorted to begin with using sblist_insert_sorted() - which doesn't pull
+   in libc's qsort(), and is faster. */
 void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
+
+/* for all functions below using a compare function the following rule applies:
+   the searched-for item will be passed to the compare function as first
+   argument, the pivot item as second.
+   in case of sblist_sort, the order is unspecified, as it depends on the
+   implementation details of libc qsort().
+*/
+
 /* insert element into presorted list, returns listindex of new entry or -1*/
 size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, const void *));
 
