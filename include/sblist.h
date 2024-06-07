@@ -96,6 +96,16 @@ void sblist_sort(sblist *l, int (*compar)(const void *, const void *));
 
 /* insert element into presorted list, returns listindex of new entry or -1*/
 size_t sblist_insert_sorted(sblist* l, void* o, int (*compar)(const void *, const void *));
+/* same as above, but provides a context pointer passed to qsort_r-style 3-arg
+   compare function. */
+size_t sblist_insert_sorted_r(sblist* l, void* o, int (*compar)(const void *, const void *, void*), void* ctx);
+
+/* binary-searches for item in a sorted list using compar func.
+   returns -1L if not found, otherwise index. */
+size_t sblist_bsearch(sblist *l, const void* item, int (*compar)(const void*, const void*));
+/* same as above, but provides a context pointer passed to qsort_r-style 3-arg
+   compare function. */
+size_t sblist_bsearch_r(sblist *l, const void* item, int (*compar)(const void*, const void*, void*), void* ctx);
 
 #ifndef __COUNTER__
 #define __COUNTER__ __LINE__
