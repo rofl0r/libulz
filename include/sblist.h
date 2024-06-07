@@ -41,6 +41,16 @@ typedef struct {
    be requested whenever the list needs to grow. */
 sblist* sblist_new(size_t itemsize, size_t blockitems);
 
+/* allocate and init a sblist from an existing contiguous chunk of memory.
+   if that list is to be used for both read and write operations, it needs
+   to be allocated by a libc function compatible with further usage of realloc.
+   blockitems will be set to 0 - see above for what that means.
+   if a different blockitems value is needed (only makes sense in r/w mode),
+   it may be set using sblist_set_blockitems().
+ */
+sblist *sblist_new_from_data(size_t itemsize, void *data, size_t datalen);
+#define sblist_set_blockitems(X, N) do { (X)->blockitems = N; } while(0)
+
 /* free dynamically allocated list and its internal buffers */
 void sblist_free(sblist* l);
 
