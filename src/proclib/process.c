@@ -52,7 +52,7 @@ int process_close(struct process *p) {
 	for(i=0; i<3; ++i) close(p->fds[i]);
 	waitpid(p->pid, &retval, 0);
 	posix_spawn_file_actions_destroy(&p->fa);
-	return WEXITSTATUS(retval);
+	return retval;
 }
 
 #ifdef TEST
