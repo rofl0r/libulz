@@ -1,13 +1,14 @@
 #undef _GNU_SOURCE
 #define _GNU_SOURCE
-#include "../../include/logger.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #ifdef NO_LOG
 #define NO_DAEMONIZE_OUTPUT
 #endif
-
+#ifndef NO_DAEMONIZE_OUTPUT
+#include "../../include/logger.h"
+#endif
 void daemonize(void) {
 	pid_t pid = fork();
 	if (pid < 0) {
